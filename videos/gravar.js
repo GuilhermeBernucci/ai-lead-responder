@@ -9,7 +9,9 @@ const path = require("path");
 
 const [produto, idioma, saida] = process.argv.slice(2);
 const TTS = process.env.TTS_SCRIPT;
-const VOZ = idioma === "pt" ? "pt-BR-AntonioNeural" : "en-US-AndrewNeural";
+// Troque a voz sem mexer no código: VOZ_PT=pt-BR-ThalitaMultilingualNeural, VOZ_EN=en-US-AvaMultilingualNeural
+const VOZ = idioma === "pt" ? (process.env.VOZ_PT || "pt-BR-AntonioNeural") : (process.env.VOZ_EN || "en-US-AndrewNeural");
+const PYTHON = process.env.PYTHON || "python3";
 const URL = "http://localhost:8000";
 const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -122,7 +124,7 @@ function duracao(arquivo) {
   // 1) Gera a narração de cada cena
   const audios = cenas.map(([fala], i) => {
     const arq = path.join(tmp, `cena${i}.mp3`);
-    execFileSync("python3", [TTS, VOZ, fala, arq]);
+    execFileSync(PYTHON, [TTS, VOZ, fala, arq]);
     return { arq, seg: duracao(arq) };
   });
 
