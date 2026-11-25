@@ -129,7 +129,8 @@ function duracao(arquivo) {
   });
 
   // 2) Grava a tela seguindo o roteiro
-  const navegador = await chromium.launch();
+  // CANAL=msedge ou chrome usa o navegador já instalado, sem baixar o Chromium do Playwright
+  const navegador = await chromium.launch(process.env.CANAL ? { channel: process.env.CANAL } : {});
   const contexto = await navegador.newContext({ viewport: { width: 1280, height: 720 }, recordVideo: { dir: tmp, size: { width: 1280, height: 720 } } });
   const p = await contexto.newPage();
   const t0 = Date.now();
