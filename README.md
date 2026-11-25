@@ -11,9 +11,14 @@ chats with customers on the shop's website 24/7 and books them in, then follows 
 - 🔁 **"Time for your next cut?" texts** 4 weeks later (more repeat clients)
 - 🛡️ **Never double-books**: the AI's answer is always checked against real availability
 
-| Booking chat | Owner dashboard | Plans |
-|---|---|---|
-| ![Chat](demo-chat.png) | ![Dashboard](demo-painel.png) | ![Plans](demo-planos.png) |
+> Demo built for a **fictional** business, Fresh Cuts Barbershop (Miami, FL).
+> The annual-plan website bonus looks like this demo site.
+
+| Booking chat | Full website | Owner dashboard | Plans |
+|---|---|---|---|
+| ![Chat](demo-chat.png) | ![Website](demo-site.png) | ![Dashboard](demo-painel.png) | ![Plans](demo-planos.png) |
+
+Pages: `/` website with booking chat · `/painel` owner dashboard · `/planos` plans
 
 ## Plans
 

@@ -4,55 +4,162 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fresh Cuts Barbershop</title>
+<meta name="description" content="Classic cuts, skin fades and beard work on Ocean Drive, Miami. Book in seconds by chat.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --ouro: #c9a227; --fundo: #111; }
-  body { font-family: system-ui, sans-serif; margin: 0; background: var(--fundo); color: #f5f5f5; }
-  header { padding: 56px 16px 32px; text-align: center; }
-  header h1 { font-size: 40px; margin: 0; letter-spacing: 1px; }
-  header h1 span { color: var(--ouro); }
-  header p { color: #bbb; }
-  .servicos { max-width: 520px; margin: 0 auto; padding: 0 16px; }
-  .servicos div { display: flex; justify-content: space-between; border-bottom: 1px solid #2a2a2a; padding: 10px 0; }
-  .links { text-align: center; margin: 28px 0; font-size: 13px; }
-  .links a { color: var(--ouro); margin: 0 8px; }
+  :root {
+    --teal: #0e4d52; --teal-escuro: #08363a; --rosa: #f4b6c2; --espuma: #bfe3d9;
+    --latao: #c9a44c; --tinta: #1b2426; --branco: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Work Sans", system-ui, sans-serif; color: var(--tinta); background: var(--branco); line-height: 1.55; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--latao); outline-offset: 2px; }
+
+  /* Topo */
+  .barra { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; background: var(--teal-escuro); color: var(--espuma); font-size: 14px; }
+  .barra .logo { font-family: "Poiret One", sans-serif; font-size: 24px; color: var(--branco); letter-spacing: .04em; text-decoration: none; }
+  .barra nav a { margin-left: 18px; text-decoration: none; }
+
+  /* Hero: o raio de sol Art Deco atrás, o chat como peça principal */
+  .hero { position: relative; overflow: hidden; color: var(--branco); padding: 56px 24px 72px;
+          background: repeating-conic-gradient(from 180deg at 50% 115%, var(--teal) 0deg 6deg, #115a60 6deg 12deg); }
+  .hero-grade { position: relative; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 48px; align-items: center; }
+  .hero h1 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: clamp(44px, 7vw, 84px); line-height: 1; margin: 0 0 20px; }
+  .hero p { font-size: 18px; max-width: 30em; color: var(--espuma); }
+  .hero .horario { margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(191,227,217,.35); font-size: 15px; }
+
   /* Chat */
-  #chat { position: fixed; right: 16px; bottom: 16px; width: min(360px, calc(100vw - 32px));
-          background: #fff; color: #111; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,.5);
-          display: flex; flex-direction: column; overflow: hidden; }
-  #chat .topo { background: var(--ouro); color: #111; padding: 12px 16px; font-weight: 700; }
-  #msgs { height: 320px; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-  .m { max-width: 85%; padding: 8px 12px; border-radius: 14px; font-size: 14px; line-height: 1.4; }
-  .bot { background: #f0f0f0; align-self: flex-start; }
-  .eu { background: #111; color: #fff; align-self: flex-end; }
-  form { display: flex; border-top: 1px solid #eee; }
-  input { flex: 1; border: 0; padding: 12px; font: inherit; outline: none; }
-  button { border: 0; background: #111; color: #fff; padding: 0 16px; cursor: pointer; }
+  .chat { background: var(--branco); color: var(--tinta); border-radius: 22px 22px 22px 4px; box-shadow: 0 24px 60px rgba(4,30,32,.45); overflow: hidden; display: flex; flex-direction: column; }
+  .chat-topo { background: var(--rosa); padding: 14px 18px; }
+  .chat-topo b { display: block; font-size: 16px; }
+  .chat-topo span { font-size: 13px; }
+  #msgs { height: 300px; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .m { max-width: 86%; padding: 9px 13px; border-radius: 16px; font-size: 14px; }
+  .bot { background: #eef6f4; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .eu { background: var(--teal); color: var(--branco); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .digitando { color: #6b7b7d; font-style: italic; }
+  .sugestoes { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 14px 10px; }
+  .sugestoes[hidden] { display: none; }
+  .sugestoes button { border: 1px solid var(--espuma); background: var(--branco); border-radius: 20px; padding: 5px 11px; font: inherit; font-size: 13px; cursor: pointer; color: var(--teal); }
+  .chat form { display: flex; border-top: 1px solid #e3ecea; }
+  .chat input { flex: 1; border: 0; padding: 14px; font: inherit; }
+  .chat input:focus { outline: none; }
+  .chat form button { border: 0; background: var(--teal); color: var(--branco); padding: 0 18px; font: inherit; font-weight: 600; cursor: pointer; }
+
+  section { padding: 72px 24px; }
+  .miolo { max-width: 1080px; margin: 0 auto; }
+  h2 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 40px; margin: 0 0 28px; color: var(--teal); }
+
+  /* Serviços: lista de preços como cardápio de barbearia */
+  .precos { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 56px; }
+  .item { display: flex; align-items: baseline; gap: 10px; padding: 12px 0; }
+  .item .nome { font-weight: 600; }
+  .item .pontos { flex: 1; border-bottom: 2px dotted #c7d6d3; transform: translateY(-4px); }
+  .item small { display: block; color: #5c6b6d; font-size: 14px; }
+
+  /* Barbeiros */
+  .equipe { background: var(--espuma); }
+  .barbeiros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .barbeiro .foto { aspect-ratio: 4/5; border-radius: 120px 120px 8px 8px; background: var(--teal); display: grid; place-items: center;
+                    color: var(--rosa); font-family: "Poiret One", sans-serif; font-size: 64px; }
+  .barbeiro h3 { margin: 14px 0 2px; }
+  .barbeiro p { margin: 0; color: #35494b; font-size: 15px; }
+
+  /* Avaliações */
+  .avaliacoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  blockquote { margin: 0; font-size: 17px; }
+  blockquote footer { margin-top: 10px; font-size: 14px; color: #5c6b6d; }
+  .estrelas { color: var(--latao); letter-spacing: 2px; }
+
+  /* Rodapé */
+  footer.rodape { background: var(--teal-escuro); color: var(--espuma); padding: 48px 24px; }
+  .rodape .miolo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; font-size: 15px; }
+  .rodape b { color: var(--branco); display: block; margin-bottom: 6px; }
+  .demo-links { text-align: center; padding: 14px; font-size: 13px; background: var(--rosa); }
+
+  @media (max-width: 860px) {
+    .hero-grade, .precos, .barbeiros, .avaliacoes, .rodape .miolo { grid-template-columns: 1fr; }
+    .barra nav { display: none; }
+  }
 </style>
 </head>
 <body>
-  <header>
-    <h1>FRESH <span>CUTS</span></h1>
-    <p>Barbershop · 120 Ocean Dr, Miami · Mon-Sat 9am-7pm</p>
-  </header>
-  <section class="servicos">
-    <div><span>Haircut</span><span>$35</span></div>
-    <div><span>Skin Fade</span><span>$40</span></div>
-    <div><span>Beard Trim</span><span>$20</span></div>
-    <div><span>Haircut + Beard</span><span>$50</span></div>
-    <div><span>Kids Cut</span><span>$25</span></div>
-  </section>
-  <p class="links"><a href="/painel">Ver painel do dono →</a><a href="/planos">Ver planos →</a></p>
+  <div class="demo-links">Demo for a fictional business · <a href="/painel">Open the owner dashboard</a> · <a href="/planos">See plans</a></div>
 
-  <div id="chat">
-    <div class="topo">💈 Book with Fresh Cuts · replies instantly</div>
-    <div id="msgs"><div class="m bot">Hey! 👋 Want to book a cut? Just tell me what you need and when.</div></div>
-    <form id="f"><input id="txt" placeholder="e.g. a fade on Friday at 3pm" autocomplete="off"><button>➤</button></form>
+  <header class="barra">
+    <a class="logo" href="/">Fresh Cuts</a>
+    <nav><a href="#servicos">Services</a><a href="#equipe">Barbers</a><a href="#visite">Visit</a></nav>
+  </header>
+
+  <div class="hero">
+    <div class="hero-grade">
+      <div>
+        <h1>Sharp cuts on Ocean Drive</h1>
+        <p>Classic cuts, skin fades and hot-towel beard work since 2014. Tell our assistant what you want and when, and you're booked in seconds, even at 2am.</p>
+        <p class="horario">Mon–Sat, 9am–7pm · Walk-ins welcome when chairs are free</p>
+      </div>
+
+      <div class="chat" aria-label="Booking chat">
+        <div class="chat-topo"><b>Book your cut</b><span>Replies instantly, day or night</span></div>
+        <div id="msgs" aria-live="polite"><div class="m bot">Hey! What can we do for you, and when works for you?</div></div>
+        <div class="sugestoes" id="sugestoes">
+          <button type="button">A skin fade on Friday at 3pm</button>
+          <button type="button">How much is a beard trim?</button>
+        </div>
+        <form id="f"><input id="txt" placeholder="Type a message" autocomplete="off" aria-label="Message"><button>Send</button></form>
+      </div>
+    </div>
   </div>
 
+  <section id="servicos">
+    <div class="miolo">
+      <h2>Services</h2>
+      <div class="precos">
+        <div class="item"><div><span class="nome">Haircut</span><small>Scissor or clipper, wash and style</small></div><span class="pontos"></span><b>$35</b></div>
+        <div class="item"><div><span class="nome">Skin Fade</span><small>Bald to blended, razor-finished line-up</small></div><span class="pontos"></span><b>$40</b></div>
+        <div class="item"><div><span class="nome">Beard Trim</span><small>Shape, line-up and hot towel</small></div><span class="pontos"></span><b>$20</b></div>
+        <div class="item"><div><span class="nome">Haircut + Beard</span><small>The full reset, about an hour</small></div><span class="pontos"></span><b>$50</b></div>
+        <div class="item"><div><span class="nome">Kids Cut</span><small>Ages 12 and under</small></div><span class="pontos"></span><b>$25</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="equipe" id="equipe">
+    <div class="miolo">
+      <h2>Your barbers</h2>
+      <div class="barbeiros">
+        <div class="barbeiro"><div class="foto" aria-hidden="true">M</div><h3>Marcus Rivera</h3><p>Owner. 15 years behind the chair, fades and tapers.</p></div>
+        <div class="barbeiro"><div class="foto" aria-hidden="true">J</div><h3>Jay Thompson</h3><p>Beard specialist and the steadiest straight razor in Miami Beach.</p></div>
+        <div class="barbeiro"><div class="foto" aria-hidden="true">L</div><h3>Luis Ortega</h3><p>Textured hair, designs and kids who don't sit still.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="miolo">
+      <h2>What clients say</h2>
+      <div class="avaliacoes">
+        <blockquote><span class="estrelas" aria-label="5 stars">★★★★★</span><p>Booked at midnight from my couch, got a reminder the day before, cleanest fade I've had.</p><footer>Andre P., Google review</footer></blockquote>
+        <blockquote><span class="estrelas" aria-label="5 stars">★★★★★</span><p>Jay fixed a beard two other shops gave up on. On time, no waiting around.</p><footer>Chris M., Google review</footer></blockquote>
+        <blockquote><span class="estrelas" aria-label="5 stars">★★★★★</span><p>My son actually likes getting his hair cut now. Luis is great with kids.</p><footer>Maria G., Google review</footer></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <footer class="rodape" id="visite">
+    <div class="miolo">
+      <div><b>Visit</b>120 Ocean Dr, Miami Beach, FL</div>
+      <div><b>Hours</b>Mon–Sat 9am–7pm<br>Sunday closed</div>
+      <div><b>Call</b>(305) 555-0123</div>
+    </div>
+  </footer>
+
 <script>
-  // A conversa inteira fica guardada aqui e vai junto em cada mensagem,
+  // A conversa inteira vai junto em cada mensagem,
   // porque a IA não "lembra" de nada sozinha entre uma chamada e outra.
-  const conversa = [];
+  const conversa = [{ role: "assistant", content: "Hey! What can we do for you, and when works for you?" }];
   const msgs = document.getElementById("msgs");
 
   function mostrar(texto, quem) {
@@ -61,22 +168,32 @@
     div.textContent = texto;
     msgs.appendChild(div);
     msgs.scrollTop = msgs.scrollHeight;
+    return div;
   }
 
-  document.getElementById("f").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const campo = document.getElementById("txt");
-    const texto = campo.value.trim();
-    if (!texto) return;
-    campo.value = "";
+  async function enviar(texto) {
+    document.getElementById("sugestoes").hidden = true;
     mostrar(texto, "eu");
     conversa.push({ role: "user", content: texto });
+    const aguarde = mostrar("typing…", "bot digitando");
+    try {
+      const resp = await fetch("/chat", { method: "POST", body: JSON.stringify({ conversa: conversa.slice(1) }) });
+      const dados = await resp.json();
+      aguarde.remove();
+      mostrar(dados.reply, "bot");
+      conversa.push({ role: "assistant", content: dados.reply });
+    } catch (erro) {
+      aguarde.textContent = "Couldn't reach the shop. Check your connection and send again, or call (305) 555-0123.";
+    }
+  }
 
-    const resp = await fetch("/chat", { method: "POST", body: JSON.stringify({ conversa }) });
-    const dados = await resp.json();
-    mostrar(dados.reply, "bot");
-    conversa.push({ role: "assistant", content: dados.reply });
+  document.getElementById("f").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const campo = document.getElementById("txt");
+    if (campo.value.trim()) enviar(campo.value.trim());
+    campo.value = "";
   });
+  document.querySelectorAll("#sugestoes button").forEach(b => b.addEventListener("click", () => enviar(b.textContent)));
 </script>
 </body>
 </html>

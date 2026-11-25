@@ -1,22 +1,83 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agenda da Barbearia</title>
+<title>Fresh Cuts Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  body { font-family: system-ui, sans-serif; background: #f5f5f4; margin: 0; padding: 24px 16px; color: #1c1917; }
-  main { max-width: 760px; margin: 0 auto; }
-  .card { background: #fff; border-radius: 12px; padding: 14px 18px; margin-top: 12px;
-          box-shadow: 0 4px 20px rgba(0,0,0,.06); border-left: 4px solid #c9a227; line-height: 1.6; }
-  .resumo { font-size: 18px; }
-  summary { cursor: pointer; color: #a16207; margin-top: 6px; }
-  li { margin: 6px 0; }
+  :root { --teal: #0e4d52; --teal-escuro: #08363a; --rosa: #f4b6c2; --espuma: #bfe3d9; --latao: #c9a44c; --tinta: #1b2426; --cinza: #5c6b6d; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Work Sans", system-ui, sans-serif; color: var(--tinta); background: #f6faf9; line-height: 1.5; }
+  :focus-visible { outline: 3px solid var(--latao); outline-offset: 2px; }
+  header { background: var(--teal-escuro); color: var(--espuma); padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; }
+  header .logo { font-family: "Poiret One", sans-serif; font-size: 24px; color: #fff; }
+  header a { color: var(--espuma); font-size: 14px; }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 40px; margin: 0; color: var(--teal); }
+  .intro { color: var(--cinza); margin: 6px 0 28px; max-width: 38em; }
+
+  /* Como funciona: é uma sequência de verdade, então numeramos */
+  .como { background: #fff; border: 1px solid #dbe8e5; border-radius: 14px; padding: 20px 24px; margin-bottom: 28px; }
+  .como h2 { font-size: 17px; margin: 0 0 12px; }
+  .como ol { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+  .como li::marker { color: var(--teal); font-weight: 600; }
+
+  .numeros { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #dbe8e5; border: 1px solid #dbe8e5; border-radius: 14px; overflow: hidden; margin-bottom: 36px; }
+  .numeros div { background: #fff; padding: 18px; }
+  .numeros strong { display: block; font-size: 30px; color: var(--teal); font-weight: 600; }
+  .numeros span { font-size: 14px; color: var(--cinza); }
+
+  .dia { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 26px; color: var(--teal); margin: 32px 0 10px; }
+  .lista { border-left: 3px solid var(--espuma); padding-left: 18px; display: grid; gap: 10px; }
+  .horario { display: grid; grid-template-columns: 84px 1fr; gap: 14px; background: #fff; border-radius: 12px; padding: 14px 16px; border: 1px solid #e3eeeb; }
+  .horario time { font-weight: 600; color: var(--teal); }
+  .tel { display: block; color: var(--cinza); font-size: 14px; }
+  summary { cursor: pointer; color: var(--teal); font-size: 14px; margin-top: 6px; font-weight: 500; }
+  details[open] summary { margin-bottom: 8px; }
+
+  /* Linha do tempo dos lembretes */
+  .linha { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .linha li { position: relative; padding-left: 22px; font-size: 14px; }
+  .linha li::before { content: ""; position: absolute; left: 4px; top: 6px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--teal); background: #fff; }
+  .linha li.sent::before { background: var(--teal); }
+  .linha li:not(:last-child)::after { content: ""; position: absolute; left: 9px; top: 18px; bottom: -12px; border-left: 1px dashed #9fbfba; }
+  .motivo { background: #fdeef1; color: #8a3a4c; border-radius: 10px; padding: 1px 8px; font-size: 12px; margin-left: 6px; }
+  q { display: block; color: var(--cinza); margin-top: 3px; quotes: "“" "”"; }
+
+  .dica { margin-top: 40px; background: var(--rosa); border-radius: 14px; padding: 18px 22px; }
+  .dica b { display: block; margin-bottom: 4px; }
+  .vazio { background: #fff; padding: 20px; border-radius: 12px; }
+
+  @media (max-width: 700px) {
+    .numeros { grid-template-columns: 1fr 1fr; }
+    .horario { grid-template-columns: 1fr; gap: 4px; }
+  }
 </style>
 </head>
-<body><main>
-  <h1>Agenda do dono 💈</h1>
-  <a href="/">← site da barbearia</a>
-  {{CONTEUDO}}
-</main></body>
+<body>
+  <header><span class="logo">Fresh Cuts</span><a href="/">Back to your website</a></header>
+  <main>
+    <h1>Good morning, Marcus</h1>
+    <p class="intro">This is your booking assistant's report. Everything below was booked by the chat on your website, with no calls and no back-and-forth texts.</p>
+
+    <section class="como">
+      <h2>How your assistant works</h2>
+      <ol>
+        <li>A client opens your website and tells the chat what they want and when.</li>
+        <li>The assistant offers only times that are really free, then asks for a name and phone number.</li>
+        <li>The appointment shows up here, on the right day and time.</li>
+        <li>Reminder texts go out on their own. Open any appointment to see exactly what will be sent and when.</li>
+      </ol>
+    </section>
+
+    {{CONTEUDO}}
+
+    <aside class="dica">
+      <b>Tip: share your booking link</b>
+      Put your website link in your Instagram bio and Google profile. Every client who books there skips the phone, and you keep cutting.
+    </aside>
+  </main>
+</body>
 </html>
