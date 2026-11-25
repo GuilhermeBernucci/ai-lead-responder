@@ -1,29 +1,41 @@
-# AI Lead Responder
+# AI Lead Responder for Contractors
 
-**Never lose a lead because you replied too late.**
+**The contractor who replies first usually wins the job. Now you always reply first.**
 
-An AI automation for local service businesses (plumbers, contractors, remodelers).
-When a customer requests a quote on the website, the AI instantly:
+An AI automation for remodelers, roofers and general contractors.
+When a homeowner requests an estimate on your website, the AI instantly:
 
-1. **Classifies urgency**: emergency, high, or normal
-2. **Identifies the service** and a realistic price range
-3. **Replies to the customer within seconds** with a professional, personalized email
-4. **Shows everything on an owner dashboard**, with emergencies flagged in red
+1. **Scores the lead**: HOT (ready to hire), WARM, or COLD (just browsing)
+2. **Identifies the project** and a realistic local price range
+3. **Replies to the homeowner within seconds** with a personalized, professional email
+4. **Suggests the questions to ask** on the first call
+5. **Shows everything on an owner dashboard**, hottest leads first
 
-| Customer quote form | Owner dashboard |
+| Homeowner estimate form | Owner dashboard |
 |---|---|
-| ![Customer form](demo-cliente.png) | ![Owner dashboard](demo-painel.png) |
+| ![Estimate form](demo-cliente.png) | ![Owner dashboard](demo-painel.png) |
+
+## Plans
+
+| | Setup | Monthly |
+|---|---|---|
+| **Monthly plan** | $1,500 one-time setup | $199/month (hosting, AI usage, support) |
+| **Annual plan** ⭐ | **Setup included** | $1,990/year (2 months free) |
+
+🎁 **Annual plan bonus: a professional website for your business, built for free**
+with your services, photos, reviews and contact info, with the AI estimate form already built in.
 
 ## How it works
 
 ```
-Customer form ──► app.py ──► ia.py ──► Claude (structured JSON output)
-                    │                    urgency · service · price · summary · reply email
+Estimate form ──► app.py ──► ia.py ──► Claude (structured JSON output)
+                    │                    lead score · project · price range
+                    │                    summary · questions · reply email
                     ▼
               pedidos.json ──► /painel (owner dashboard)
 ```
 
-The AI is required to fill in a fixed JSON schema instead of returning free text,
+The AI must fill in a fixed JSON schema instead of returning free text,
 so the rest of the system always receives predictable, validated data.
 
 ## Run it
@@ -35,7 +47,7 @@ python3 app.py
 ```
 
 Then open http://localhost:8000. Without an API key, the app runs in **demo mode**
-(simple keyword rules), so you can try it for free.
+(simple rules), so you can try it for free.
 
 To use real AI:
 
@@ -45,8 +57,8 @@ export ANTHROPIC_API_KEY=your-key-here
 python3 app.py
 ```
 
-## Next steps (production version)
+## Production version adds
 
-- Send the reply email for real (Gmail / SendGrid)
-- SMS alert to the owner for emergencies (Twilio)
-- Connect to the business's real website form or CRM
+- Real email replies (Gmail / SendGrid) and SMS alerts for HOT leads (Twilio)
+- Automatic follow-up for estimates with no answer after 2 days
+- Integration with the contractor's website, CRM or Google Sheets
