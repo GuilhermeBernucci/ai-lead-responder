@@ -20,6 +20,14 @@ chats with customers on the shop's website 24/7 and books them in, then follows 
 
 Pages: `/` website with booking chat · `/painel` owner dashboard · `/planos` plans
 
+## Video walkthroughs
+
+- 🇺🇸 English: [videos/barbearia-en.mp4](videos/barbearia-en.mp4) (58s)
+- 🇧🇷 Português: [videos/barbearia-pt.mp4](videos/barbearia-pt.mp4) (75s)
+
+Recorded automatically with `videos/gravar.js` (Playwright + narration). To re-record after changing the site:
+start the app, then run `TTS_SCRIPT=videos/tts.py node videos/gravar.js barbearia en videos`.
+
 ## Plans
 
 | Plan | Price | Includes |
