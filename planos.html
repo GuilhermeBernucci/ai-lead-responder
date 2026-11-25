@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Booking Assistant Plans</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #111; color: #f5f5f5; margin: 0; padding: 48px 16px; }
+  h1 { text-align: center; margin: 0; } .sub { text-align: center; color: #bbb; margin-bottom: 32px; }
+  .planos { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; max-width: 960px; margin: 0 auto; }
+  .plano { background: #1c1c1c; border: 1px solid #333; border-radius: 16px; padding: 24px; width: 250px; }
+  .plano.destaque { border: 2px solid #c9a227; position: relative; }
+  .selo { position: absolute; top: -12px; left: 24px; background: #c9a227; color: #111;
+          font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .preco { font-size: 34px; font-weight: 800; margin: 8px 0; } .preco small { font-size: 14px; color: #aaa; }
+  ul { padding-left: 18px; color: #ddd; line-height: 1.8; font-size: 14px; }
+  .bonus { background: #2a2410; border: 1px dashed #c9a227; border-radius: 10px; padding: 10px; font-size: 14px; }
+  a.voltar { display: block; text-align: center; margin-top: 32px; color: #c9a227; }
+</style>
+</head>
+<body>
+  <h1>AI Booking Assistant for Barbershops & Salons</h1>
+  <p class="sub">Never miss a booking while you're cutting. Fewer no-shows. More repeat clients.</p>
+  <div class="planos">
+    <div class="plano">
+      <h3>Starter</h3>
+      <div class="preco">$49<small>/month</small></div>
+      <ul><li>24/7 AI booking chat on your site</li><li>Owner calendar dashboard</li><li>SMS reminders (24h + 2h)</li></ul>
+    </div>
+    <div class="plano">
+      <h3>Pro</h3>
+      <div class="preco">$99<small>/month</small></div>
+      <ul><li>Everything in Starter</li><li>"Time for your next cut" rebooking texts</li>
+          <li>Instagram & Google booking link</li><li>AI replies to Google reviews</li></ul>
+    </div>
+    <div class="plano destaque">
+      <span class="selo">BEST VALUE</span>
+      <h3>Pro Annual</h3>
+      <div class="preco">$990<small>/year</small></div>
+      <ul><li>Everything in Pro</li><li>2 months free</li></ul>
+      <div class="bonus">🎁 <b>FREE professional website</b> for your shop, built with your services,
+        prices, photos and reviews, with the AI booking chat already inside.</div>
+    </div>
+  </div>
+  <a class="voltar" href="/">← back to demo</a>
+</body>
+</html>
