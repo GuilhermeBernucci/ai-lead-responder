@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rapid Flow Plumbing</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f2f6fb; margin: 0; color: #101828; }
+  .box { max-width: 520px; margin: 40px auto; background: #fff; padding: 28px; border-radius: 12px;
+         box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+  h1 { margin: 0 0 4px; color: #1849a9; }
+  p { color: #475467; }
+  label { display: block; margin-top: 14px; font-weight: 600; font-size: 14px; }
+  input, textarea { width: 100%; box-sizing: border-box; padding: 10px; margin-top: 6px;
+                    border: 1px solid #d0d5dd; border-radius: 8px; font: inherit; }
+  button { margin-top: 18px; width: 100%; padding: 12px; background: #1849a9; color: #fff;
+           border: 0; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  .dica { font-size: 13px; margin-top: 20px; text-align: center; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <h1>Rapid Flow Plumbing</h1>
+    <p>Austin, TX · Get a free quote. We reply in minutes, 24/7.</p>
+    <form method="post" action="/pedido">
+      <label>Your name <input name="nome" required placeholder="John Miller"></label>
+      <label>Email <input name="email" type="email" required placeholder="john@email.com"></label>
+      <label>How can we help?
+        <textarea name="mensagem" rows="5" required
+          placeholder="A pipe burst under my kitchen sink and water is everywhere!"></textarea></label>
+      <button>Request a quote</button>
+    </form>
+    <p class="dica"><a href="/painel">Ver painel do dono →</a></p>
+  </div>
+</body>
+</html>
