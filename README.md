@@ -20,6 +20,14 @@ When a homeowner requests an estimate on your website, the AI instantly:
 
 Pages: `/` website · `/obrigado` thank-you page with the reply email · `/painel` owner dashboard
 
+## Video walkthroughs
+
+- 🇺🇸 English: [videos/construcao-en.mp4](videos/construcao-en.mp4) (44s)
+- 🇧🇷 Português: [videos/construcao-pt.mp4](videos/construcao-pt.mp4) (53s)
+
+Recorded automatically with `videos/gravar.js` (Playwright + narration). To re-record after changing the site:
+start the app, then run `TTS_SCRIPT=videos/tts.py node videos/gravar.js construcao en videos`.
+
 ## Plans
 
 | | Setup | Monthly |
