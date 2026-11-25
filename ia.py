@@ -19,11 +19,11 @@ ESQUEMA = {
         "lead_score": {"type": "string", "enum": ["hot", "warm", "cold"]},
         "project_type": {"type": "string"},
         "estimated_range": {"type": "string"},
-        "summary_pt": {"type": "string"},
+        "summary": {"type": "string"},
         "questions_to_ask": {"type": "array", "items": {"type": "string"}},
         "reply_email": {"type": "string"},
     },
-    "required": ["lead_score", "project_type", "estimated_range", "summary_pt",
+    "required": ["lead_score", "project_type", "estimated_range", "summary",
                  "questions_to_ask", "reply_email"],
     "additionalProperties": False,
 }
@@ -35,8 +35,8 @@ A homeowner just requested an estimate on the website. Analyze it and return:
   "warm" (real project but vague or later), or "cold" (just browsing, tiny job, or unclear).
 - project_type: short name of the project, in English.
 - estimated_range: a realistic Dallas-area price range, e.g. "$25,000 - $45,000".
-- summary_pt: one-sentence summary IN BRAZILIAN PORTUGUESE for the business owner,
-  including why you gave that lead_score.
+- summary: one plain-English sentence for the business owner explaining the project
+  and why you gave that lead_score.
 - questions_to_ask: 2-3 short questions (in English) the contractor should ask on the call.
 - reply_email: a warm, professional email to the homeowner, in English, signed
   "Summit Build & Remodel Team". Thank them, show you understood their project, and
@@ -120,7 +120,8 @@ def _modo_demo(pedido: dict) -> dict:
         "lead_score": score,
         "project_type": tipo,
         "estimated_range": PRECOS.get(tipo, "$1,000 - $10,000"),
-        "summary_pt": f"{pedido['nome']} quer: {tipo}. Orçamento: {pedido['orcamento']}, prazo: {pedido['prazo']}.",
+        "summary": (f"{tipo} with a budget of {pedido['orcamento']} and a start of "
+                    f"'{pedido['prazo']}'. Scored {score} from budget, timeline and detail given."),
         "questions_to_ask": [
             "What's the approximate size of the area?",
             "Do you already have a design or materials in mind?",

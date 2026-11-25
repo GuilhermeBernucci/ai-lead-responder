@@ -11,9 +11,14 @@ When a homeowner requests an estimate on your website, the AI instantly:
 4. **Suggests the questions to ask** on the first call
 5. **Shows everything on an owner dashboard**, hottest leads first
 
-| Homeowner estimate form | Owner dashboard |
-|---|---|
-| ![Estimate form](demo-cliente.png) | ![Owner dashboard](demo-painel.png) |
+> Demo built for a **fictional** business, Summit Build & Remodel (Dallas, TX).
+> The annual-plan website bonus looks like this demo site.
+
+| Contractor website + estimate form | What the homeowner gets | Owner dashboard |
+|---|---|---|
+| ![Website](demo-site.png) | ![Thank-you page](demo-obrigado.png) | ![Owner dashboard](demo-painel.png) |
+
+Pages: `/` website · `/obrigado` thank-you page with the reply email · `/painel` owner dashboard
 
 ## Plans
 
@@ -28,11 +33,11 @@ with your services, photos, reviews and contact info, with the AI estimate form 
 ## How it works
 
 ```
-Estimate form ──► app.py ──► ia.py ──► Claude (structured JSON output)
+Website form ──► app.py ──► ia.py ──► Claude (structured JSON output)
                     │                    lead score · project · price range
                     │                    summary · questions · reply email
                     ▼
-              pedidos.json ──► /painel (owner dashboard)
+              pedidos.json ──► /painel (owner dashboard, sorted: Call today · Call this week · Keep in touch)
 ```
 
 The AI must fill in a fixed JSON schema instead of returning free text,
