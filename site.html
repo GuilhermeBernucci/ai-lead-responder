@@ -8,14 +8,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
 <style>
-  :root { --ardosia: #2f3b45; --ardosia-escura: #222b33; --concreto: #e9ebea; --cedro: #a65e2e; --salvia: #7d8c6a; --branco: #fff; --texto: #24303a; --cinza: #5d6a73; }
+  :root { --ardosia: #1B2F68; --ardosia-escura: #12204a; --concreto: #F4E1D2; --cedro: #640119; --salvia: #b08f78; --branco: #fff; --texto: #1a2340; --cinza: #5b6075; }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: "Archivo", system-ui, sans-serif; color: var(--texto); background: var(--branco); line-height: 1.55; }
   a { color: inherit; }
   :focus-visible { outline: 3px solid var(--cedro); outline-offset: 2px; }
   .demo-links { text-align: center; padding: 12px; font-size: 13px; background: var(--concreto); }
 
-  .barra { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 1px solid #dde1e0; }
+  .barra { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 1px solid #ead2bf; }
   .logo { font-weight: 800; font-stretch: 125%; font-size: 20px; text-decoration: none; color: var(--ardosia); }
   .logo small { display: block; font-weight: 500; font-stretch: 100%; font-size: 12px; color: var(--cinza); }
   .barra .tel { font-weight: 700; text-decoration: none; color: var(--cedro); }
@@ -23,24 +23,24 @@
   /* Hero: título largo e pesado, como letreiro de obra, com o formulário ao lado */
   /* Foto de fundo: GoodLifeConstruction / Unsplash. O degradê escuro deixa o texto legível. */
   .hero { padding: 56px max(28px, calc((100% - 1104px) / 2)) 72px; display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: start; color: var(--branco);
-          background: linear-gradient(90deg, rgba(34,43,51,.92) 0%, rgba(34,43,51,.7) 55%, rgba(34,43,51,.4) 100%),
+          background: linear-gradient(90deg, rgba(18,32,74,.92) 0%, rgba(18,32,74,.7) 55%, rgba(18,32,74,.4) 100%),
                       url("https://images.unsplash.com/photo-1771888703722-ee7ad9143a67?w=2000&q=70&auto=format&fit=crop") center / cover no-repeat, var(--ardosia); }
   .hero h1 { font-weight: 800; font-stretch: 125%; font-size: clamp(40px, 5.4vw, 68px); line-height: .98; letter-spacing: -.01em; margin: 8px 0 22px; color: var(--branco); }
-  .hero p.lead { font-size: 19px; color: #e4e8ea; max-width: 30em; }
+  .hero p.lead { font-size: 19px; color: #f7ece3; max-width: 30em; }
   .provas { display: flex; gap: 32px; margin-top: 32px; flex-wrap: wrap; }
   .provas div { border-left: 3px solid var(--cedro); padding-left: 12px; }
   .provas b { display: block; font-size: 22px; font-stretch: 112%; }
-  .provas span { font-size: 14px; color: #c9d1d6; }
+  .provas span { font-size: 14px; color: #e8d9cc; }
 
   .form { background: var(--ardosia); color: var(--branco); border-radius: 6px; padding: 28px; }
   .form h2 { margin: 0 0 4px; font-stretch: 112%; font-size: 24px; }
-  .form p { margin: 0 0 8px; color: #c9d1d6; font-size: 15px; }
+  .form p { margin: 0 0 8px; color: #e8d9cc; font-size: 15px; }
   label { display: block; margin-top: 14px; font-weight: 600; font-size: 14px; }
   input, textarea, select { width: 100%; padding: 11px; margin-top: 6px; border: 0; border-radius: 4px; font: inherit; font-size: 15px; background: var(--branco); color: var(--texto); }
   .linha { display: flex; gap: 12px; } .linha label { flex: 1; }
   .form button { margin-top: 20px; width: 100%; padding: 14px; background: var(--cedro); color: var(--branco); border: 0; border-radius: 4px; font: inherit; font-weight: 700; font-size: 17px; cursor: pointer; }
-  .form button:hover { background: #8f4f25; }
-  .form .nota { font-size: 13px; margin-top: 10px; color: #c9d1d6; }
+  .form button:hover { background: #4a0012; }
+  .form .nota { font-size: 13px; margin-top: 10px; color: #e8d9cc; }
 
   section { padding: 72px 28px; }
   .miolo { max-width: 1160px; margin: 0 auto; }
@@ -56,11 +56,11 @@
 
   /* Obras recentes: ficha técnica, como uma placa de obra */
   .obras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .obra { border: 1px solid #dde1e0; border-radius: 6px; overflow: hidden; }
-  .obra .faixa { height: 140px; background: repeating-linear-gradient(135deg, var(--salvia) 0 14px, #8a9977 14px 28px); display: flex; align-items: flex-end; padding: 12px; }
+  .obra { border: 1px solid #ead2bf; border-radius: 6px; overflow: hidden; }
+  .obra .faixa { height: 140px; background: repeating-linear-gradient(135deg, var(--salvia) 0 14px, #bd9c85 14px 28px); display: flex; align-items: flex-end; padding: 12px; }
   .obra .faixa span { background: var(--branco); padding: 3px 8px; border-radius: 3px; font-size: 13px; font-weight: 600; }
-  .obra.b .faixa { background: repeating-linear-gradient(135deg, var(--cedro) 0 14px, #b46a38 14px 28px); }
-  .obra.c .faixa { background: repeating-linear-gradient(135deg, var(--ardosia) 0 14px, #3a4853 14px 28px); }
+  .obra.b .faixa { background: repeating-linear-gradient(135deg, var(--cedro) 0 14px, #7a0a24 14px 28px); }
+  .obra.c .faixa { background: repeating-linear-gradient(135deg, var(--ardosia) 0 14px, #253c80 14px 28px); }
   .obra .corpo { padding: 16px; }
   .obra h3 { margin: 0 0 8px; font-size: 18px; }
   .obra dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
@@ -70,7 +70,7 @@
   blockquote { margin: 0; font-size: 17px; }
   blockquote footer { margin-top: 10px; font-size: 14px; color: var(--cinza); }
 
-  footer.rodape { background: var(--ardosia-escura); color: #c9d1d6; padding: 44px 28px; font-size: 15px; }
+  footer.rodape { background: var(--ardosia-escura); color: #e8d9cc; padding: 44px 28px; font-size: 15px; }
   .rodape .miolo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .rodape b { color: var(--branco); display: block; margin-bottom: 6px; }
 
