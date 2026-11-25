@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --teal: #0e4d52; --teal-escuro: #08363a; --rosa: #f4b6c2; --espuma: #bfe3d9;
-    --latao: #c9a44c; --tinta: #1b2426; --branco: #ffffff;
+    --teal: #000000; --teal-escuro: #0d0d0d; --rosa: #CFE6A9; --espuma: #CFE6A9;
+    --latao: #B57C4C; --tinta: #1a1a1a; --branco: #ffffff;
   }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: "Work Sans", system-ui, sans-serif; color: var(--tinta); background: var(--branco); line-height: 1.55; }
@@ -24,26 +24,28 @@
 
   /* Hero: o raio de sol Art Deco atrás, o chat como peça principal */
   .hero { position: relative; overflow: hidden; color: var(--branco); padding: 56px 24px 72px;
-          background: repeating-conic-gradient(from 180deg at 50% 115%, var(--teal) 0deg 6deg, #115a60 6deg 12deg); }
+          /* Foto: Mustafa Sheikhmouss / Unsplash. O degradê preto deixa o texto legível. */
+          background: linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.6) 55%, rgba(0,0,0,.35) 100%),
+                      url("https://images.unsplash.com/photo-1792523227995-9ac04cf1d94d?w=2000&q=70&auto=format&fit=crop") center / cover no-repeat, var(--teal); }
   .hero-grade { position: relative; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 48px; align-items: center; }
   .hero h1 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: clamp(44px, 7vw, 84px); line-height: 1; margin: 0 0 20px; }
   .hero p { font-size: 18px; max-width: 30em; color: var(--espuma); }
-  .hero .horario { margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(191,227,217,.35); font-size: 15px; }
+  .hero .horario { margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(207,230,169,.35); font-size: 15px; }
 
   /* Chat */
-  .chat { background: var(--branco); color: var(--tinta); border-radius: 22px 22px 22px 4px; box-shadow: 0 24px 60px rgba(4,30,32,.45); overflow: hidden; display: flex; flex-direction: column; }
+  .chat { background: var(--branco); color: var(--tinta); border-radius: 22px 22px 22px 4px; box-shadow: 0 24px 60px rgba(0,0,0,.45); overflow: hidden; display: flex; flex-direction: column; }
   .chat-topo { background: var(--rosa); padding: 14px 18px; }
   .chat-topo b { display: block; font-size: 16px; }
   .chat-topo span { font-size: 13px; }
   #msgs { height: 300px; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
   .m { max-width: 86%; padding: 9px 13px; border-radius: 16px; font-size: 14px; }
-  .bot { background: #eef6f4; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .bot { background: #f2f8e8; align-self: flex-start; border-bottom-left-radius: 4px; }
   .eu { background: var(--teal); color: var(--branco); align-self: flex-end; border-bottom-right-radius: 4px; }
-  .digitando { color: #6b7b7d; font-style: italic; }
+  .digitando { color: #6b6b6b; font-style: italic; }
   .sugestoes { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 14px 10px; }
   .sugestoes[hidden] { display: none; }
   .sugestoes button { border: 1px solid var(--espuma); background: var(--branco); border-radius: 20px; padding: 5px 11px; font: inherit; font-size: 13px; cursor: pointer; color: var(--teal); }
-  .chat form { display: flex; border-top: 1px solid #e3ecea; }
+  .chat form { display: flex; border-top: 1px solid #e7eedc; }
   .chat input { flex: 1; border: 0; padding: 14px; font: inherit; }
   .chat input:focus { outline: none; }
   .chat form button { border: 0; background: var(--teal); color: var(--branco); padding: 0 18px; font: inherit; font-weight: 600; cursor: pointer; }
@@ -56,8 +58,8 @@
   .precos { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 56px; }
   .item { display: flex; align-items: baseline; gap: 10px; padding: 12px 0; }
   .item .nome { font-weight: 600; }
-  .item .pontos { flex: 1; border-bottom: 2px dotted #c7d6d3; transform: translateY(-4px); }
-  .item small { display: block; color: #5c6b6d; font-size: 14px; }
+  .item .pontos { flex: 1; border-bottom: 2px dotted #d9bfa6; transform: translateY(-4px); }
+  .item small { display: block; color: #5c5c5c; font-size: 14px; }
 
   /* Barbeiros */
   .equipe { background: var(--espuma); }
@@ -65,12 +67,12 @@
   .barbeiro .foto { aspect-ratio: 4/5; border-radius: 120px 120px 8px 8px; background: var(--teal); display: grid; place-items: center;
                     color: var(--rosa); font-family: "Poiret One", sans-serif; font-size: 64px; }
   .barbeiro h3 { margin: 14px 0 2px; }
-  .barbeiro p { margin: 0; color: #35494b; font-size: 15px; }
+  .barbeiro p { margin: 0; color: #333333; font-size: 15px; }
 
   /* Avaliações */
   .avaliacoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
   blockquote { margin: 0; font-size: 17px; }
-  blockquote footer { margin-top: 10px; font-size: 14px; color: #5c6b6d; }
+  blockquote footer { margin-top: 10px; font-size: 14px; color: #5c5c5c; }
   .estrelas { color: var(--latao); letter-spacing: 2px; }
 
   /* Rodapé */

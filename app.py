@@ -19,6 +19,11 @@ ARQUIVO_AGENDA = PASTA / "agendamentos.json"
 FORMATO_SLOT = "%A %b %d %H:%M"  # ex.: "Friday Nov 27 15:00"
 
 
+def hora(dt):
+    """"3:00 PM" sem zero à esquerda; o %-I do strftime não funciona no Windows."""
+    return f"{dt.hour % 12 or 12}:{dt:%M %p}"
+
+
 # ---------------- Dados ----------------
 
 def slot_para_data(slot: str) -> datetime:
@@ -76,7 +81,7 @@ def lembretes(agendamento: dict) -> list:
     inicio = slot_para_data(agendamento["slot"])
     return [
         (inicio - timedelta(hours=24), "Reminder", "cuts no-shows",
-         f"Hi {nome}! Reminder: your {servico} at Fresh Cuts is tomorrow at {inicio:%-I:%M %p}. Reply C to cancel."),
+         f"Hi {nome}! Reminder: your {servico} at Fresh Cuts is tomorrow at {hora(inicio)}. Reply C to cancel."),
         (inicio - timedelta(hours=2), "Heads-up", "keeps you on time",
          f"See you soon, {nome}! Your {servico} is in 2 hours. 120 Ocean Dr."),
         (inicio + timedelta(weeks=4), "Rebooking", "brings them back",
@@ -122,18 +127,18 @@ def montar_painel() -> str:
             if dia_atual is not None:
                 partes.append("</div>")
             dia_atual = inicio.date()
-            partes.append(f"<h3 class='dia'>{inicio:%A, %B %-d}</h3><div class='lista'>")
+            partes.append(f"<h3 class='dia'>{inicio:%A, %B} {inicio.day}</h3><div class='lista'>")
 
         passos = []
         for quando, nome, motivo, texto in lembretes(a):
             estado = "sent" if quando < datetime.now() else "scheduled"
-            passos.append(f"""<li class="{estado}"><b>{nome}</b> · {quando:%a %b %-d, %-I:%M %p}
+            passos.append(f"""<li class="{estado}"><b>{nome}</b> · {quando:%a %b} {quando.day}, {hora(quando)}
               <span class="motivo">{motivo}</span><q>{html.escape(texto)}</q></li>""")
 
         preco = SERVICOS.get(a["service"], {}).get("preco", "?")
         partes.append(f"""
         <article class="horario">
-          <time>{inicio:%-I:%M %p}</time>
+          <time>{hora(inicio)}</time>
           <div class="info">
             <b>{html.escape(a['customer_name'])}</b> · {html.escape(a['service'])} · ${preco}
             <span class="tel">{html.escape(a['phone'])}</span>
@@ -163,7 +168,7 @@ class Servidor(BaseHTTPRequestHandler):
         if resultado["ready_to_book"] and resultado["slot"] in livres:
             agenda = carregar_agenda()
             novo = {k: resultado[k] for k in ["service", "slot", "customer_name", "phone"]}
-            novo["booked_at"] = datetime.now().strftime("%-I:%M %p")
+            novo["booked_at"] = hora(datetime.now())
             agenda.append(novo)
             salvar_agenda(agenda)
             # Num produto real: aqui programaríamos os SMS de verdade (ex.: Twilio)
