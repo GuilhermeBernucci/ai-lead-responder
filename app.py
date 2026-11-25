@@ -59,7 +59,7 @@ def registrar(pedido: dict, hora: str | None = None) -> None:
     inicio = time.time()
     pedido["analise"] = analisar_pedido(pedido)  # <- aqui a IA trabalha
     pedido["segundos"] = max(1, round(time.time() - inicio))
-    pedido["quando"] = hora or datetime.now().strftime("%-I:%M %p")
+    pedido["quando"] = hora or f"{datetime.now().hour % 12 or 12}:{datetime.now():%M %p}"
     pedidos = json.loads(ARQUIVO_PEDIDOS.read_text(encoding="utf-8")) if ARQUIVO_PEDIDOS.exists() else []
     pedidos.insert(0, pedido)
     salvar_pedidos(pedidos)
