@@ -28,6 +28,16 @@ Pages: `/` website with booking chat · `/painel` owner dashboard · `/planos` p
 Recorded automatically with `videos/gravar.js` (Playwright + narration). To re-record after changing the site:
 start the app, then run `TTS_SCRIPT=videos/tts.py node videos/gravar.js barbearia en videos`.
 
+**Voice options** (`videos/tts.py`):
+
+- Free (default): Microsoft Edge voices. Pick one with `VOZ_PT=pt-BR-ThalitaMultilingualNeural VOZ_EN=en-US-AvaMultilingualNeural`.
+- More human: [ElevenLabs](https://elevenlabs.io). Set `ELEVENLABS_API_KEY` and pass ElevenLabs voice IDs instead:
+  `VOZ_PT=<voice-id> VOZ_EN=<voice-id>`. The `eleven_multilingual_v2` model speaks both Portuguese and English
+  (override with `ELEVENLABS_MODELO`). Commercial use needs a paid ElevenLabs plan.
+
+On Windows, add `PYTHON=python CANAL=msedge` to use the installed Edge browser, e.g.
+`PYTHON=python CANAL=msedge TTS_SCRIPT=videos/tts.py node videos/gravar.js barbearia pt videos`.
+
 ## Plans
 
 | Plan | Price | Includes |
