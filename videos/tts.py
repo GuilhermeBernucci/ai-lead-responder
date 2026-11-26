@@ -18,6 +18,14 @@ import urllib.request
 
 voz, texto, saida = sys.argv[1], sys.argv[2], sys.argv[3]
 chave = os.environ.get("ELEVENLABS_API_KEY", "").strip()
+if not chave and os.name == "nt":
+    # No Windows, uma chave salva com setx só aparece em programas abertos depois; lê direto do registro
+    try:
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as k:
+            chave = str(winreg.QueryValueEx(k, "ELEVENLABS_API_KEY")[0]).strip()
+    except OSError:
+        pass
 
 
 def elevenlabs():
