@@ -22,8 +22,8 @@ Pages: `/` website · `/obrigado` thank-you page with the reply email · `/paine
 
 ## Video walkthroughs
 
-- 🇺🇸 English: [videos/construcao-en.mp4](videos/construcao-en.mp4) (42s)
-- 🇧🇷 Português: [videos/construcao-pt.mp4](videos/construcao-pt.mp4) (46s)
+- 🇺🇸 English: [videos/construcao-en.mp4](videos/construcao-en.mp4) (54s)
+- 🇧🇷 Português: [videos/construcao-pt.mp4](videos/construcao-pt.mp4) (47s)
 
 Recorded automatically with `videos/gravar.js` (Playwright + narration). To re-record after changing the site:
 start the app, then run `TTS_SCRIPT=videos/tts.py node videos/gravar.js construcao en videos`.
