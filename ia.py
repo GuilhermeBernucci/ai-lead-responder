@@ -10,6 +10,8 @@ Dois modos:
 import json
 import os
 
+import traducao as tr
+
 # O "formulário" que a IA é obrigada a preencher (structured output).
 # Assim o resto do programa sempre recebe os mesmos campos.
 ESQUEMA = {
@@ -107,7 +109,9 @@ def _modo_demo(pedido: dict) -> dict:
         pontos += 1
     score = "hot" if pontos == 3 else "warm" if pontos >= 1 else "cold"
 
-    primeiro_nome = pedido["nome"].split()[0] if pedido["nome"].strip() else "there"
+    primeiro_nome = pedido["nome"].split()[0] if pedido["nome"].strip() else tr.t("there", "tudo bem")
+    if tr.EM_PT:
+        return _modo_demo_pt(pedido, score, primeiro_nome)
     email = (
         f"Hi {primeiro_nome},\n\n"
         f"Thank you for contacting Vertex Build about your {tipo.lower()} project! "
@@ -125,6 +129,32 @@ def _modo_demo(pedido: dict) -> dict:
         "questions_to_ask": [
             "What's the approximate size of the area?",
             "Do you already have a design or materials in mind?",
+        ],
+        "reply_email": email,
+    }
+
+
+def _modo_demo_pt(pedido: dict, score: str, primeiro_nome: str) -> dict:
+    """Mesma análise do modo demo, escrita em português (vídeos em PT)."""
+    tipo = tr.frase(pedido["tipo"])
+    nivel = {"hot": "quente", "warm": "morno", "cold": "frio"}[score]
+    email = (
+        f"Olá, {primeiro_nome}!\n\n"
+        f"Obrigado por falar com a Vertex Build sobre o seu projeto de {tipo.lower()}! "
+        f"Vamos adorar tirar essa ideia do papel.\n\n"
+        f"O próximo passo é um orçamento grátis no local. Ligue para (214) 555-0182 ou responda "
+        f"este e-mail com dois ou três horários que funcionem pra você.\n\n"
+        f"Um abraço,\nEquipe Vertex Build"
+    )
+    return {
+        "lead_score": score,
+        "project_type": tipo,
+        "estimated_range": PRECOS.get(pedido["tipo"], "$1,000 - $10,000"),
+        "summary": (f"{tipo} com orçamento de {tr.frase(pedido['orcamento'])} e início em "
+                    f"'{tr.frase(pedido['prazo'])}'. Classificado como {nivel} pelo orçamento, prazo e detalhes."),
+        "questions_to_ask": [
+            "Qual é o tamanho aproximado da área?",
+            "Você já tem um projeto ou materiais em mente?",
         ],
         "reply_email": email,
     }

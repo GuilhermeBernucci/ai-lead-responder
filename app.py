@@ -14,6 +14,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs
 
+import traducao as tr
 from ia import analisar_pedido
 
 PASTA = Path(__file__).parent
@@ -70,7 +71,7 @@ def registrar(pedido: dict, hora: str | None = None) -> None:
 # ---------------- Páginas ----------------
 
 def pagina(nome_arquivo: str, conteudo: str = "") -> str:
-    return (PASTA / nome_arquivo).read_text(encoding="utf-8").replace("{{CONTEUDO}}", conteudo)
+    return tr.pagina((PASTA / nome_arquivo).read_text(encoding="utf-8").replace("{{CONTEUDO}}", conteudo))
 
 
 def cartao(p: dict) -> str:

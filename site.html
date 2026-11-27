@@ -4,178 +4,265 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vertex Build</title>
-<meta name="description" content="Kitchen and bathroom remodels, additions, roofing and decks in Dallas. Free on-site estimates.">
+<meta name="description" content="High-end residential and commercial construction and remodeling in Dallas. Free on-site estimates.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* Vertex Build: preto (fundo e cabeçalho), dourado (botões e destaques),
      cinza escuro (seções secundárias), branco (textos e fundos claros) */
   :root { --preto: #0B0B0B; --dourado: #D4AF37; --dourado-escuro: #b8962b; --cinza-escuro: #1F2937; --branco: #F8FAFC;
-          --linha: #2d3748; --suave: #9CA3AF; --texto-claro: #d1d5db; }
+          --linha: rgba(212,175,55,.35); --suave: #9CA3AF; --texto-claro: #d1d5db; --tinta: #111827; }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Archivo", system-ui, sans-serif; color: var(--branco); background: var(--preto); line-height: 1.55; }
+  body { margin: 0; font-family: "Manrope", system-ui, sans-serif; color: var(--branco); background: var(--preto); line-height: 1.6; }
   a { color: inherit; }
+  img { display: block; max-width: 100%; }
   :focus-visible { outline: 3px solid var(--dourado); outline-offset: 2px; }
-  .demo-links { text-align: center; padding: 12px; font-size: 13px; background: var(--cinza-escuro); color: var(--texto-claro); }
+  .miolo { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+  .demo-links { text-align: center; padding: 8px; font-size: 12px; background: var(--cinza-escuro); color: var(--suave); }
+  .sobrelinha { display: flex; align-items: center; gap: 16px; color: var(--dourado); font-size: 13px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; margin: 0 0 14px; }
+  .sobrelinha::after { content: ""; width: 60px; height: 1px; background: var(--dourado); }
+  em.ouro { font-style: normal; color: var(--dourado); }
+  .botao { display: inline-flex; align-items: center; gap: 10px; background: var(--dourado); color: var(--preto); font-weight: 700; text-decoration: none; padding: 13px 22px; border-radius: 3px; border: 1px solid var(--dourado); }
+  .botao:hover { background: var(--dourado-escuro); }
+  .botao.vazado { background: transparent; color: var(--dourado); }
+  .botao.vazado:hover { background: rgba(212,175,55,.1); }
+  .botao::after { content: "›"; font-size: 20px; line-height: 0; }
 
-  .barra { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; background: var(--preto); border-bottom: 1px solid var(--linha); }
-  .logo { font-weight: 800; font-stretch: 125%; font-size: 22px; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; color: var(--branco); }
-  .logo em { font-style: normal; color: var(--dourado); }
-  .logo small { display: block; font-weight: 500; font-stretch: 100%; font-size: 12px; letter-spacing: 0; text-transform: none; color: var(--suave); }
-  .barra .tel { font-weight: 700; text-decoration: none; color: var(--dourado); }
+  /* Cabeçalho */
+  .topo { background: var(--preto); border-bottom: 1px solid rgba(255,255,255,.06); }
+  .topo .miolo { display: flex; align-items: center; gap: 32px; height: 84px; }
+  .marca { display: flex; align-items: center; gap: 14px; text-decoration: none; padding-right: 32px; border-right: 1px solid var(--linha); }
+  .marca svg { width: 64px; height: 44px; }
+  .marca b { display: block; font-size: 24px; font-weight: 700; letter-spacing: .32em; line-height: 1; }
+  .marca span { display: block; font-size: 15px; font-weight: 700; letter-spacing: .5em; color: var(--dourado); margin-top: 6px; }
+  .topo nav { display: flex; gap: 30px; font-size: 15px; flex: 1; }
+  .topo nav a { text-decoration: none; color: var(--texto-claro); padding: 6px 0; }
+  .topo nav a.ativo { color: var(--dourado); border-bottom: 2px solid var(--dourado); }
+  .topo .botao { padding: 10px 18px; font-size: 14px; }
 
-  /* Hero: título largo e pesado, como letreiro de obra, com o formulário ao lado */
-  /* Foto de fundo: GoodLifeConstruction / Unsplash. O degradê preto deixa o texto legível. */
-  .hero { padding: 56px max(28px, calc((100% - 1104px) / 2)) 72px; display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: start; color: var(--branco);
-          background: linear-gradient(90deg, rgba(11,11,11,.94) 0%, rgba(11,11,11,.75) 55%, rgba(11,11,11,.45) 100%),
-                      url("https://images.unsplash.com/photo-1771888703722-ee7ad9143a67?w=2000&q=70&auto=format&fit=crop") center / cover no-repeat, var(--preto); }
-  .hero h1 { font-weight: 800; font-stretch: 125%; font-size: clamp(40px, 5.4vw, 68px); line-height: .98; letter-spacing: -.01em; margin: 8px 0 22px; color: var(--branco); }
-  .hero p.lead { font-size: 19px; color: var(--texto-claro); max-width: 30em; }
-  .provas { display: flex; gap: 32px; margin-top: 32px; flex-wrap: wrap; }
-  .provas div { border-left: 3px solid var(--dourado); padding-left: 12px; }
-  .provas b { display: block; font-size: 22px; font-stretch: 112%; }
-  .provas span { font-size: 14px; color: var(--suave); }
+  /* Hero: foto de casa de alto padrão, título com destaque dourado */
+  /* Foto: Arthur Baudry / Unsplash */
+  .hero { position: relative; padding: 96px 0 104px;
+          background: linear-gradient(90deg, rgba(11,11,11,.96) 0%, rgba(11,11,11,.82) 38%, rgba(11,11,11,.15) 75%),
+                      url("https://images.unsplash.com/photo-1748063578185-3d68121b11ff?w=2200&q=70&auto=format&fit=crop") center right / cover no-repeat, var(--preto); }
+  .hero h1 { font-size: clamp(44px, 6vw, 76px); line-height: 1.02; letter-spacing: -.02em; font-weight: 800; margin: 0 0 22px; max-width: 11em; }
+  .hero p.lead { font-size: 20px; font-weight: 600; color: var(--branco); max-width: 27em; margin: 0 0 32px; }
 
-  .form { background: var(--cinza-escuro); color: var(--branco); border-radius: 6px; padding: 28px; border-top: 4px solid var(--dourado); }
-  .form h2 { margin: 0 0 4px; font-stretch: 112%; font-size: 24px; }
+  /* Diferenciais */
+  .diferenciais { background: linear-gradient(180deg, #121212, #0d0d0d); border-top: 1px solid rgba(255,255,255,.06); border-bottom: 1px solid rgba(255,255,255,.06); }
+  .diferenciais .miolo { display: grid; grid-template-columns: repeat(4, 1fr); padding-top: 26px; padding-bottom: 26px; }
+  .dif { display: flex; align-items: center; gap: 18px; padding: 4px 24px; }
+  .dif + .dif { border-left: 1px solid var(--linha); }
+  .dif svg { width: 42px; height: 42px; flex: none; stroke: var(--dourado); fill: none; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+  .dif b { display: block; font-weight: 600; } .dif span { color: var(--texto-claro); font-size: 14px; }
+
+  /* Projetos: seção clara */
+  .projetos { background: var(--branco); color: var(--tinta); padding: 72px 0; }
+  .projetos .miolo { display: grid; grid-template-columns: 300px 1fr; gap: 48px; align-items: center; }
+  .projetos h2 { font-size: 46px; line-height: 1.05; letter-spacing: -.02em; margin: 0 0 16px; font-weight: 800; }
+  .projetos p { color: #374151; margin: 0 0 24px; }
+  .projetos .botao.vazado { color: var(--tinta); border-color: var(--dourado); }
+  .fotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .foto { position: relative; aspect-ratio: 5 / 4; overflow: hidden; background: var(--cinza-escuro); margin: 0; }
+  .foto img { width: 100%; height: 100%; object-fit: cover; }
+  .foto figcaption { position: absolute; inset: auto 0 0 0; padding: 40px 16px 14px; color: var(--branco); font-weight: 700; background: linear-gradient(transparent, rgba(0,0,0,.8)); }
+  .foto figcaption small { display: block; font-weight: 500; color: var(--texto-claro); font-size: 13px; }
+
+  /* Sobre: seção escura com foto de obra */
+  /* Foto: Seth Fink / Unsplash */
+  .sobre { background: linear-gradient(90deg, rgba(11,11,11,.2) 0%, rgba(11,11,11,.9) 42%, var(--preto) 60%),
+                       url("https://images.unsplash.com/photo-1552530697-b6f76b88f5c5?w=1400&q=70&auto=format&fit=crop") left center / 50% auto no-repeat, var(--preto);
+           padding: 80px 0; }
+  .sobre .miolo { display: grid; grid-template-columns: 1fr 1.25fr .8fr; gap: 40px; align-items: center; }
+  .sobre .texto { grid-column: 2; border-left: 1px solid var(--linha); padding-left: 36px; }
+  .sobre h2 { font-size: 36px; line-height: 1.12; margin: 0 0 16px; font-weight: 800; }
+  .sobre p { color: var(--texto-claro); margin: 0 0 24px; }
+  .sobre ul { list-style: none; margin: 0; padding: 0 0 0 32px; border-left: 1px solid var(--linha); display: grid; gap: 22px; }
+  .sobre li { display: flex; gap: 14px; align-items: center; font-size: 14px; color: var(--texto-claro); }
+  .sobre li svg { width: 32px; height: 32px; flex: none; stroke: var(--dourado); fill: none; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+
+  /* Orçamento: o formulário que a IA responde */
+  .orcamento { background: var(--cinza-escuro); padding: 80px 0; }
+  .orcamento .miolo { display: grid; grid-template-columns: 1fr 460px; gap: 64px; align-items: start; }
+  .orcamento h2 { font-size: 40px; line-height: 1.08; margin: 0 0 16px; font-weight: 800; }
+  .orcamento .lead { color: var(--texto-claro); font-size: 18px; }
+  .provas { display: grid; gap: 18px; margin-top: 32px; }
+  .provas div { border-left: 3px solid var(--dourado); padding-left: 14px; }
+  .provas b { display: block; font-size: 20px; } .provas span { font-size: 14px; color: var(--suave); }
+  .form { background: var(--preto); color: var(--branco); border-radius: 4px; padding: 28px; border-top: 3px solid var(--dourado); }
+  .form h3 { margin: 0 0 4px; font-size: 22px; }
   .form p { margin: 0 0 8px; color: var(--suave); font-size: 15px; }
   label { display: block; margin-top: 14px; font-weight: 600; font-size: 14px; }
-  input, textarea, select { width: 100%; padding: 11px; margin-top: 6px; border: 0; border-radius: 4px; font: inherit; font-size: 15px; background: var(--branco); color: var(--preto); }
+  input, textarea, select { width: 100%; padding: 11px; margin-top: 6px; border: 1px solid #374151; border-radius: 3px; font: inherit; font-size: 15px; background: var(--branco); color: var(--preto); }
   .linha { display: flex; gap: 12px; } .linha label { flex: 1; }
-  .form button { margin-top: 20px; width: 100%; padding: 14px; background: var(--dourado); color: var(--preto); border: 0; border-radius: 4px; font: inherit; font-weight: 700; font-size: 17px; cursor: pointer; }
+  .form button { margin-top: 20px; width: 100%; padding: 14px; background: var(--dourado); color: var(--preto); border: 0; border-radius: 3px; font: inherit; font-weight: 800; font-size: 17px; cursor: pointer; }
   .form button:hover { background: var(--dourado-escuro); }
   .form .nota { font-size: 13px; margin-top: 10px; color: var(--suave); }
 
-  section { padding: 72px 28px; }
-  .miolo { max-width: 1160px; margin: 0 auto; }
-  h2.titulo { font-weight: 800; font-stretch: 118%; font-size: 36px; margin: 0 0 32px; color: var(--branco); }
+  /* Chamada final */
+  .chamada { background: linear-gradient(90deg, #0d0d0d 30%, #1a1a1a); border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); padding: 36px 0; }
+  .chamada .miolo { display: grid; grid-template-columns: 1.3fr 1fr auto; gap: 32px; align-items: center; }
+  .chamada h2 { font-size: 32px; line-height: 1.15; margin: 0; font-weight: 800; }
+  .chamada p { margin: 0; color: var(--texto-claro); font-weight: 600; }
 
-  /* Processo: é uma sequência real, por isso os números */
-  .processo { background: var(--cinza-escuro); }
-  .passos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; counter-reset: passo; }
-  .passo { counter-increment: passo; border-top: 3px solid var(--dourado); padding-top: 14px; }
-  .passo::before { content: counter(passo); font-weight: 800; font-stretch: 125%; font-size: 40px; color: var(--dourado); }
-  .passo h3 { margin: 4px 0 6px; font-size: 18px; }
-  .passo p { margin: 0; color: var(--texto-claro); font-size: 15px; }
+  /* Rodapé */
+  .rodape { padding: 36px 0; }
+  .rodape .miolo { display: grid; grid-template-columns: auto 1fr auto auto; gap: 40px; align-items: center; }
+  .rodape .frase { color: var(--texto-claro); }
+  .redes { display: flex; gap: 22px; padding: 0 32px; border-left: 1px solid var(--linha); border-right: 1px solid var(--linha); }
+  .redes svg { width: 26px; height: 26px; fill: var(--branco); }
+  .contato { font-size: 14px; color: var(--suave); line-height: 1.7; }
+  .contato b { color: var(--branco); }
 
-  /* Obras recentes: ficha técnica, como uma placa de obra */
-  .obras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .obra { border: 1px solid var(--linha); border-radius: 6px; overflow: hidden; background: var(--cinza-escuro); }
-  .obra .faixa { height: 140px; background: repeating-linear-gradient(135deg, var(--dourado) 0 14px, #c29f2f 14px 28px); display: flex; align-items: flex-end; padding: 12px; }
-  .obra .faixa span { background: var(--preto); color: var(--branco); padding: 3px 8px; border-radius: 3px; font-size: 13px; font-weight: 600; }
-  .obra.b .faixa { background: repeating-linear-gradient(135deg, #374151 0 14px, #2d3748 14px 28px); }
-  .obra.c .faixa { background: repeating-linear-gradient(135deg, #1a1a1a 0 14px, #262626 14px 28px); }
-  .obra .corpo { padding: 16px; }
-  .obra h3 { margin: 0 0 8px; font-size: 18px; }
-  .obra dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
-  .obra dt { color: var(--suave); } .obra dd { margin: 0; font-weight: 600; }
-
-  .avaliacoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-  blockquote { margin: 0; font-size: 17px; border-left: 3px solid var(--dourado); padding-left: 16px; }
-  blockquote footer { margin-top: 10px; font-size: 14px; color: var(--suave); }
-
-  footer.rodape { background: var(--preto); color: var(--suave); padding: 44px 28px; font-size: 15px; border-top: 1px solid var(--linha); }
-  .rodape .miolo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .rodape b { color: var(--dourado); display: block; margin-bottom: 6px; }
-
-  @media (max-width: 900px) {
-    .hero, .passos, .obras, .avaliacoes, .rodape .miolo { grid-template-columns: 1fr; }
+  @media (max-width: 980px) {
+    .topo nav { display: none; }
+    .diferenciais .miolo, .fotos { grid-template-columns: 1fr 1fr; }
+    .dif + .dif { border-left: 0; }
+    .projetos .miolo, .sobre .miolo, .orcamento .miolo, .chamada .miolo, .rodape .miolo { grid-template-columns: 1fr; }
+    .sobre { background: var(--preto); } .sobre .texto { grid-column: auto; }
+    .redes { border: 0; padding: 0; }
+  }
+  @media (max-width: 600px) {
+    .topo .botao { display: none; } .marca { border: 0; padding: 0; }
+    .diferenciais .miolo, .fotos { grid-template-columns: 1fr; }
     .linha { flex-direction: column; gap: 0; }
+    .projetos h2 { font-size: 36px; }
   }
 </style>
 </head>
 <body>
   <div class="demo-links">Demo for a fictional business · <a href="/painel">Open the owner dashboard</a></div>
 
-  <header class="barra">
-    <a class="logo" href="/">Vertex <em>Build</em><small>Licensed and insured in Dallas since 2009</small></a>
-    <a class="tel" href="tel:2145550182">(214) 555-0182</a>
+  <header class="topo">
+    <div class="miolo">
+      <a class="marca" href="/" aria-label="Vertex Build, home">
+        <svg viewBox="0 0 64 44" aria-hidden="true"><path d="M2 2h16l14 26L46 2h16L36 42h-8z" fill="#D4AF37"/><path d="M20 2h8l8 15-4 7z" fill="#0B0B0B"/></svg>
+        <div><b>VERTEX</b><span>BUILD</span></div>
+      </a>
+      <nav aria-label="Main">
+        <a class="ativo" href="/">Home</a><a href="#sobre">About</a><a href="#projetos">Projects</a><a href="#orcamento">Services</a><a href="#sobre">Why us</a><a href="#contato">Contact</a>
+      </nav>
+      <a class="botao vazado" href="#orcamento">Request a quote</a>
+    </div>
   </header>
 
-  <div class="hero">
-    <div>
-      <h1>Remodels done right, on schedule</h1>
-      <p class="lead">Kitchens, bathrooms, additions, roofs and decks across Dallas. Tell us about your project and you'll hear back within minutes, not days.</p>
-      <div class="provas">
-        <div><b>4.9 on Google</b><span>212 reviews</span></div>
-        <div><b>640+ projects</b><span>finished since 2009</span></div>
-        <div><b>5-year warranty</b><span>on all workmanship</span></div>
-      </div>
-    </div>
-
-    <form class="form" method="post" action="/pedido">
-      <h2>Get a free estimate</h2>
-      <p>Takes about a minute. No pressure, no spam.</p>
-      <div class="linha">
-        <label>Your name <input name="nome" required autocomplete="name"></label>
-        <label>Phone <input name="telefone" required autocomplete="tel"></label>
-      </div>
-      <label>Email <input name="email" type="email" required autocomplete="email"></label>
-      <label>Project type
-        <select name="tipo">
-          <option>Kitchen remodel</option><option>Bathroom remodel</option><option>Roofing</option>
-          <option>Deck / patio</option><option>Home addition</option><option>Repairs / other</option>
-        </select></label>
-      <div class="linha">
-        <label>Budget
-          <select name="orcamento">
-            <option>Not sure</option><option>Under $10k</option><option>$10k - $30k</option>
-            <option>$30k - $75k</option><option>$75k+</option>
-          </select></label>
-        <label>Start
-          <select name="prazo">
-            <option>ASAP</option><option>1-3 months</option><option>3-6 months</option><option>Just exploring</option>
-          </select></label>
-      </div>
-      <label>Tell us about your project
-        <textarea name="mensagem" rows="4" required placeholder="What would you like to change? Rough size, materials you like, anything that matters to you."></textarea></label>
-      <button>Send my estimate request</button>
-      <p class="nota">You'll get an email from us right away, and a call to book your free on-site visit.</p>
-    </form>
-  </div>
-
-  <section class="processo">
+  <section class="hero">
     <div class="miolo">
-      <h2 class="titulo">How a project works with us</h2>
-      <div class="passos">
-        <div class="passo"><h3>Free on-site estimate</h3><p>We measure, listen and give you a written estimate within 3 business days.</p></div>
-        <div class="passo"><h3>Design and selections</h3><p>Pick materials with our designer. Fixed price before any work starts.</p></div>
-        <div class="passo"><h3>Build</h3><p>One project lead, a weekly schedule and a clean site every evening.</p></div>
-        <div class="passo"><h3>Final walkthrough</h3><p>We fix every detail on your list, then the 5-year warranty begins.</p></div>
+      <p class="sobrelinha">Vertex Build</p>
+      <h1>Building <em class="ouro">great achievements.</em></h1>
+      <p class="lead">Projects that bring together design, quality and innovation to turn your plans into reality.</p>
+      <a class="botao" href="#projetos">See our projects</a>
+    </div>
+  </section>
+
+  <section class="diferenciais" aria-label="Why Vertex Build">
+    <div class="miolo">
+      <div class="dif"><svg viewBox="0 0 40 40"><path d="M8 14l6-8h12l6 8-12 20z"/><path d="M8 14h24M14 6l6 28M26 6l-6 28"/></svg><div><b>Quality</b><span>in every detail</span></div></div>
+      <div class="dif"><svg viewBox="0 0 40 40"><path d="M20 4l13 5v10c0 9-6 15-13 17C13 34 7 28 7 19V9z"/><path d="M14 20l4 4 8-9"/></svg><div><b>Safety</b><span>at every stage</span></div></div>
+      <div class="dif"><svg viewBox="0 0 40 40"><path d="M4 18l8-6 6 3 6-3 12 8-10 8-4-3-6 5z"/><path d="M18 15l-5 6 3 2 6-5M24 18l5 4"/></svg><div><b>Commitment</b><span>to your project</span></div></div>
+      <div class="dif"><svg viewBox="0 0 40 40"><path d="M6 35V12l12-6v29M18 35V14h16v21M3 35h34"/><path d="M10 16h4M10 22h4M10 28h4M23 19h6M23 25h6M23 31h6"/></svg><div><b>Excellence</b><span>in residential and commercial work</span></div></div>
+    </div>
+  </section>
+
+  <section class="projetos" id="projetos">
+    <div class="miolo">
+      <div>
+        <p class="sobrelinha">Our projects</p>
+        <h2>Projects that <em class="ouro">inspire.</em></h2>
+        <p>From concept to handover, every build is planned to deliver the most in comfort, function and refinement.</p>
+        <a class="botao vazado" href="#orcamento">See all projects</a>
+      </div>
+      <div class="fotos">
+        <!-- Fotos: Monish Prasad, Timothy Swope e Tobias Wilden / Unsplash -->
+        <figure class="foto"><img src="https://images.unsplash.com/photo-1783490244502-cd5f236e3780?w=800&q=70&auto=format&fit=crop" alt="Modern house with a pool, lit at night" loading="lazy"><figcaption>Luxury Residence<small>Preston Hollow · 14 months</small></figcaption></figure>
+        <figure class="foto"><img src="https://images.unsplash.com/photo-1470075801209-17f9ec0cada6?w=800&q=70&auto=format&fit=crop" alt="Glass office building at dusk" loading="lazy"><figcaption>Corporate Commercial<small>Uptown Dallas · 22 months</small></figcaption></figure>
+        <figure class="foto"><img src="https://images.unsplash.com/photo-1624204386084-dd8c05e32226?w=800&q=70&auto=format&fit=crop" alt="Modern apartment building with glass balconies" loading="lazy"><figcaption>Modern Residential<small>Lake Highlands · 18 months</small></figcaption></figure>
       </div>
     </div>
   </section>
 
-  <section>
+  <section class="sobre" id="sobre">
     <div class="miolo">
-      <h2 class="titulo">Recent projects</h2>
-      <div class="obras">
-        <div class="obra"><div class="faixa"><span>Lake Highlands</span></div><div class="corpo"><h3>Open-concept kitchen</h3>
-          <dl><dt>Scope</dt><dd>Wall removal, island, quartz</dd><dt>Time</dt><dd>7 weeks</dd><dt>Budget</dt><dd>$58,000</dd></dl></div></div>
-        <div class="obra b"><div class="faixa"><span>Preston Hollow</span></div><div class="corpo"><h3>Primary bath, curbless shower</h3>
-          <dl><dt>Scope</dt><dd>Tub to walk-in shower, double vanity</dd><dt>Time</dt><dd>4 weeks</dd><dt>Budget</dt><dd>$29,500</dd></dl></div></div>
-        <div class="obra c"><div class="faixa"><span>Oak Cliff</span></div><div class="corpo"><h3>Covered cedar deck</h3>
-          <dl><dt>Scope</dt><dd>420 sq ft, roof, ceiling fans</dd><dt>Time</dt><dd>3 weeks</dd><dt>Budget</dt><dd>$24,000</dd></dl></div></div>
+      <div class="texto">
+        <p class="sobrelinha">About Vertex Build</p>
+        <h2>More than building, <em class="ouro">we deliver life projects.</em></h2>
+        <p>Vertex Build is a construction company committed to excellence, delivering complete construction and engineering solutions, always focused on quality, innovation and client satisfaction.</p>
+        <a class="botao" href="#orcamento">Learn more about us</a>
       </div>
+      <ul>
+        <li><svg viewBox="0 0 40 40"><path d="M6 35V12l12-6v29M18 35V14h16v21M3 35h34"/></svg>Complete construction solutions</li>
+        <li><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="6"/><path d="M20 4v6M20 30v6M4 20h6M30 20h6M9 9l4 4M27 27l4 4M31 9l-4 4M13 27l-4 4"/></svg>Specialized, experienced team</li>
+        <li><svg viewBox="0 0 40 40"><path d="M12 5h16v9a8 8 0 0 1-16 0zM12 9H6c0 6 3 9 7 9M28 9h6c0 6-3 9-7 9M20 22v7M13 35h14l-2-6H15z"/></svg>On time and on budget, every time</li>
+      </ul>
     </div>
   </section>
 
-  <section class="processo">
+  <section class="orcamento" id="orcamento">
     <div class="miolo">
-      <h2 class="titulo">What homeowners say</h2>
-      <div class="avaliacoes">
-        <blockquote><p>They answered my request at 11pm and were at my house two days later. The kitchen came in on budget.</p><footer>Laura B., Google review</footer></blockquote>
-        <blockquote><p>The only contractor who actually showed up when they said they would. Every single day.</p><footer>Marcus T., Google review</footer></blockquote>
-        <blockquote><p>Clear price up front and zero surprises. Our bathroom looks like a hotel now.</p><footer>Priya S., Google review</footer></blockquote>
+      <div>
+        <p class="sobrelinha">Free estimate</p>
+        <h2>Tell us about your project. <em class="ouro">We reply in minutes.</em></h2>
+        <p class="lead">Kitchens, bathrooms, additions, roofs, decks and new builds across Dallas. Send the form and you'll hear back within minutes, not days.</p>
+        <div class="provas">
+          <div><b>4.9 on Google</b><span>212 reviews</span></div>
+          <div><b>640+ projects</b><span>finished since 2009</span></div>
+          <div><b>5-year warranty</b><span>on all workmanship</span></div>
+        </div>
       </div>
+
+      <form class="form" method="post" action="/pedido">
+        <h3>Get a free estimate</h3>
+        <p>Takes about a minute. No pressure, no spam.</p>
+        <div class="linha">
+          <label>Your name <input name="nome" required autocomplete="name"></label>
+          <label>Phone <input name="telefone" required autocomplete="tel"></label>
+        </div>
+        <label>Email <input name="email" type="email" required autocomplete="email"></label>
+        <label>Project type
+          <select name="tipo">
+            <option value="Kitchen remodel">Kitchen remodel</option><option value="Bathroom remodel">Bathroom remodel</option><option value="Roofing">Roofing</option>
+            <option value="Deck / patio">Deck / patio</option><option value="Home addition">Home addition</option><option value="Repairs / other">Repairs / other</option>
+          </select></label>
+        <div class="linha">
+          <label>Budget
+            <select name="orcamento">
+              <option value="Not sure">Not sure</option><option value="Under $10k">Under $10k</option><option value="$10k - $30k">$10k - $30k</option>
+              <option value="$30k - $75k">$30k - $75k</option><option value="$75k+">$75k+</option>
+            </select></label>
+          <label>Start
+            <select name="prazo">
+              <option value="ASAP">ASAP</option><option value="1-3 months">1-3 months</option><option value="3-6 months">3-6 months</option><option value="Just exploring">Just exploring</option>
+            </select></label>
+        </div>
+        <label>Tell us about your project
+          <textarea name="mensagem" rows="4" required placeholder="What would you like to build or change? Rough size, materials you like, anything that matters to you."></textarea></label>
+        <button>Send my estimate request</button>
+        <p class="nota">You'll get an email from us right away, and a call to book your free on-site visit.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="chamada" id="contato">
+    <div class="miolo">
+      <h2>Let's build something <em class="ouro">extraordinary</em> together?</h2>
+      <p>Get in touch and request a no-obligation estimate.</p>
+      <a class="botao" href="tel:2145550182">Call (214) 555-0182</a>
     </div>
   </section>
 
   <footer class="rodape">
     <div class="miolo">
-      <div><b>Office</b>2200 Ross Ave, Dallas, TX</div>
-      <div><b>Hours</b>Mon–Fri 7am–6pm<br>Sat 8am–12pm</div>
-      <div><b>Call</b>(214) 555-0182</div>
+      <a class="marca" href="/" aria-label="Vertex Build, home">
+        <svg viewBox="0 0 64 44" aria-hidden="true"><path d="M2 2h16l14 26L46 2h16L36 42h-8z" fill="#D4AF37"/><path d="M20 2h8l8 15-4 7z" fill="#0B0B0B"/></svg>
+        <div><b>VERTEX</b><span>BUILD</span></div>
+      </a>
+      <p class="frase">Building the future, today.</p>
+      <div class="redes" aria-label="Social media">
+        <svg viewBox="0 0 24 24" role="img" aria-label="Instagram"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM12 2c-2.7 0-3 0-4.1.1C4.5 2.2 2.2 4.5 2.1 7.9 2 9 2 9.3 2 12s0 3 .1 4.1c.1 3.4 2.4 5.7 5.8 5.8 1.1.1 1.4.1 4.1.1s3 0 4.1-.1c3.4-.1 5.7-2.4 5.8-5.8.1-1.1.1-1.4.1-4.1s0-3-.1-4.1c-.1-3.4-2.4-5.7-5.8-5.8C15 2 14.7 2 12 2zm0 1.8c2.7 0 3 0 4 .1 2.4.1 3.9 1.6 4 4 .1 1 .1 1.3.1 4s0 3-.1 4c-.1 2.4-1.6 3.9-4 4-1 .1-1.3.1-4 .1s-3 0-4-.1c-2.4-.1-3.9-1.6-4-4-.1-1-.1-1.3-.1-4s0-3 .1-4c.1-2.4 1.6-3.9 4-4 1-.1 1.3-.1 4-.1z"/></svg>
+        <svg viewBox="0 0 24 24" role="img" aria-label="LinkedIn"><path d="M4.5 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 8.5h3V21H3zM9 8.5h2.9v1.7c.4-.8 1.4-1.9 3.3-1.9 3.4 0 4 2.2 4 5.1V21h-3v-6.8c0-1.6 0-3.7-2.3-3.7S11.9 12.3 11.9 14V21H9z"/></svg>
+        <svg viewBox="0 0 24 24" role="img" aria-label="YouTube"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9L15.5 12z"/></svg>
+      </div>
+      <div class="contato"><b>Office</b><br>2200 Ross Ave, Dallas, TX<br>Mon–Fri 7am–6pm · (214) 555-0182</div>
     </div>
   </footer>
 </body>

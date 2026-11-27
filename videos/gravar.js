@@ -94,7 +94,10 @@ async function preencher(p) {
   await p.type("input[name=email]", "robert@example.com", { delay: 30 });
   await p.selectOption("select[name=tipo]", "Roofing");
   await p.selectOption("select[name=orcamento]", "$10k - $30k");
-  await p.type("textarea", "Hail damage last week: several shingles missing and a leak in the upstairs bedroom. Insurance already approved.", { delay: 25 });
+  const detalhes = idioma === "pt"
+    ? "Granizo na semana passada: faltam várias telhas e tem uma goteira no quarto de cima. O seguro já aprovou."
+    : "Hail damage last week: several shingles missing and a leak in the upstairs bedroom. Insurance already approved.";
+  await p.type("textarea", detalhes, { delay: 25 });
 }
 
 // Legenda fixa na parte de baixo da tela (sobrevive às trocas de página)
