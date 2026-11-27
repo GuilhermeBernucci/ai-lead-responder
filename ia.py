@@ -134,6 +134,17 @@ def _modo_demo(pedido: dict) -> dict:
     }
 
 
+# Faixas de preço em reais, para a versão brasileira do modo demo
+PRECOS_BRL = {
+    "Kitchen remodel": "R$ 80 mil a R$ 200 mil",
+    "Bathroom remodel": "R$ 40 mil a R$ 120 mil",
+    "Roofing": "R$ 30 mil a R$ 80 mil",
+    "Deck / patio": "R$ 25 mil a R$ 80 mil",
+    "Home addition": "R$ 200 mil a R$ 500 mil",
+    "Repairs / other": "R$ 2 mil a R$ 20 mil",
+}
+
+
 def _modo_demo_pt(pedido: dict, score: str, primeiro_nome: str) -> dict:
     """Mesma análise do modo demo, escrita em português (vídeos em PT)."""
     tipo = tr.frase(pedido["tipo"])
@@ -142,14 +153,14 @@ def _modo_demo_pt(pedido: dict, score: str, primeiro_nome: str) -> dict:
         f"Olá, {primeiro_nome}!\n\n"
         f"Obrigado por falar com a Vertex Build sobre o seu projeto de {tipo.lower()}! "
         f"Vamos adorar tirar essa ideia do papel.\n\n"
-        f"O próximo passo é um orçamento grátis no local. Ligue para (214) 555-0182 ou responda "
+        f"O próximo passo é um orçamento grátis no local. Ligue para (11) 98555-0182 ou responda "
         f"este e-mail com dois ou três horários que funcionem pra você.\n\n"
         f"Um abraço,\nEquipe Vertex Build"
     )
     return {
         "lead_score": score,
         "project_type": tipo,
-        "estimated_range": PRECOS.get(pedido["tipo"], "$1,000 - $10,000"),
+        "estimated_range": PRECOS_BRL.get(pedido["tipo"], "R$ 5 mil a R$ 50 mil"),
         "summary": (f"{tipo} com orçamento de {tr.frase(pedido['orcamento'])} e início em "
                     f"'{tr.frase(pedido['prazo'])}'. Classificado como {nivel} pelo orçamento, prazo e detalhes."),
         "questions_to_ask": [

@@ -90,7 +90,7 @@ async function rolar(p, total) {
 async function preencher(p) {
   await p.locator(".form").scrollIntoViewIfNeeded();
   await p.type("input[name=nome]", "Robert Hayes", { delay: 40 });
-  await p.type("input[name=telefone]", "(214) 555-0190", { delay: 40 });
+  await p.type("input[name=telefone]", idioma === "pt" ? "(11) 98765-4321" : "(214) 555-0190", { delay: 40 });
   await p.type("input[name=email]", "robert@example.com", { delay: 30 });
   await p.selectOption("select[name=tipo]", "Roofing");
   await p.selectOption("select[name=orcamento]", "$10k - $30k");

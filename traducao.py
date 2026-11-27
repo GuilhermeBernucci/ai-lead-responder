@@ -109,10 +109,10 @@ FRASES = {
     "Home addition": "Ampliação da casa",
     "Repairs / other": "Reparos / outros",
     "Not sure": "Ainda não sei",
-    "Under $10k": "Até $10 mil",
-    "$10k - $30k": "$10 mil a $30 mil",
-    "$30k - $75k": "$30 mil a $75 mil",
-    "$75k+": "Mais de $75 mil",
+    "Under $10k": "Até R$ 50 mil",
+    "$10k - $30k": "R$ 50 mil a R$ 150 mil",
+    "$30k - $75k": "R$ 150 mil a R$ 400 mil",
+    "$75k+": "Acima de R$ 400 mil",
     "ASAP": "O quanto antes",
     "1-3 months": "1 a 3 meses",
     "3-6 months": "3 a 6 meses",
@@ -164,8 +164,28 @@ _padrao = re.compile("|".join(
     for k in sorted(FRASES, key=len, reverse=True)))
 
 
+_TEL_US = re.compile(r"\((\d{3})\)\s?(\d{3})-(\d{4})|\b(\d{3})-(\d{3})-(\d{4})\b")
+
+
+def telefone(texto: str) -> str:
+    """Em PT troca telefones americanos, (214) 555-0182, por brasileiros com DDD: (11) 98555-0182."""
+    if not EM_PT:
+        return texto
+    return _TEL_US.sub(lambda m: f"(11) 98{m.group(2) or m.group(5)}-{m.group(3) or m.group(6)}", texto)
+
+
+_HORA_US = re.compile(r"\b(\d{1,2}):(\d{2}) (AM|PM)\b")
+
+
+def horario(texto: str) -> str:
+    """Em PT troca '9:50 PM' por '21:50'."""
+    if not EM_PT:
+        return texto
+    return _HORA_US.sub(lambda m: f"{int(m.group(1)) % 12 + (12 if m.group(3) == 'PM' else 0):02d}:{m.group(2)}", texto)
+
+
 def frase(texto: str) -> str:
-    return _padrao.sub(lambda m: FRASES[m.group(0)], texto) if EM_PT else texto
+    return horario(telefone(_padrao.sub(lambda m: FRASES[m.group(0)], texto))) if EM_PT else texto
 
 
 def pagina(doc: str) -> str:
