@@ -113,7 +113,7 @@
         <div class="chat-topo"><b>Book your cut</b><span>Replies instantly, day or night</span></div>
         <div id="msgs" aria-live="polite"><div class="m bot">Hey! What can we do for you, and when works for you?</div></div>
         <div class="sugestoes" id="sugestoes">
-          <button type="button">A skin fade on Friday at 3pm</button>
+          <button type="button">A haircut tomorrow at 3pm</button>
           <button type="button">How much is a beard trim?</button>
         </div>
         <form id="f"><input id="txt" placeholder="Type a message" autocomplete="off" aria-label="Message"><button>Send</button></form>
@@ -125,11 +125,9 @@
     <div class="miolo">
       <h2>Services</h2>
       <div class="precos">
-        <div class="item"><div><span class="nome">Haircut</span><small>Scissor or clipper, wash and style</small></div><span class="pontos"></span><b>$35</b></div>
-        <div class="item"><div><span class="nome">Skin Fade</span><small>Bald to blended, razor-finished line-up</small></div><span class="pontos"></span><b>$40</b></div>
-        <div class="item"><div><span class="nome">Beard Trim</span><small>Shape, line-up and hot towel</small></div><span class="pontos"></span><b>$20</b></div>
-        <div class="item"><div><span class="nome">Haircut + Beard</span><small>The full reset, about an hour</small></div><span class="pontos"></span><b>$50</b></div>
-        <div class="item"><div><span class="nome">Kids Cut</span><small>Ages 12 and under</small></div><span class="pontos"></span><b>$25</b></div>
+        <div class="item"><div><span class="nome">Haircut</span><small>Scissor, clipper or fade, wash and style · 30 min</small></div><span class="pontos"></span><b>$35</b></div>
+        <div class="item"><div><span class="nome">Beard Trim</span><small>Shape, line-up and hot towel · 30 min</small></div><span class="pontos"></span><b>$20</b></div>
+        <div class="item"><div><span class="nome">Haircut + Beard</span><small>The full reset · 1 hr</small></div><span class="pontos"></span><b>$50</b></div>
       </div>
     </div>
   </section>
@@ -190,6 +188,7 @@
       aguarde.remove();
       mostrar(dados.reply, "bot");
       conversa.push({ role: "assistant", content: dados.reply });
+      opcoes(dados.options || []);
     } catch (erro) {
       aguarde.textContent = "Couldn't reach the shop. Check your connection and send again, or call (305) 555-0123.";
     }
@@ -201,6 +200,19 @@
     if (campo.value.trim()) enviar(campo.value.trim());
     campo.value = "";
   });
+  // Botões de opção (serviços ou horários livres) que o assistente devolve junto com a resposta
+  function opcoes(lista) {
+    const caixa = document.getElementById("sugestoes");
+    caixa.replaceChildren(...lista.map((texto) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = texto;
+      b.addEventListener("click", () => enviar(texto));
+      return b;
+    }));
+    caixa.hidden = lista.length === 0;
+  }
+
   document.querySelectorAll("#sugestoes button").forEach(b => b.addEventListener("click", () => enviar(b.textContent)));
 </script>
 </body>

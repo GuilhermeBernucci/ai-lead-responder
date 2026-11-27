@@ -69,14 +69,28 @@ def dia(dt: datetime, curto: bool = False) -> str:
 
 
 def slot(texto_slot: str) -> str:
-    """Horário interno 'Friday Nov 27 15:00' -> 'sexta, 27 de nov às 15:00' (em PT)."""
-    if not EM_PT:
-        return texto_slot
+    """Horário interno 'Friday Nov 27 15:00' -> 'Friday, Nov 27 at 3:00 PM' / 'sexta, 27 de nov às 15:00'."""
     try:
         dt = datetime.strptime(f"{datetime.now().year} {texto_slot}", "%Y %A %b %d %H:%M")
     except ValueError:
         return texto_slot
-    return f"{dia(dt)} às {dt:%H:%M}"
+    if EM_PT:
+        return f"{dia(dt)} às {dt:%H:%M}"
+    return f"{dt:%A, %b} {dt.day} at {hora(dt)}"
+
+
+def duracao(minutos: int) -> str:
+    """30 -> '30 min'; 60 -> '1 hr' / '1h'."""
+    if minutos % 60:
+        return f"{minutos} min"
+    return f"{minutos // 60}h" if EM_PT else f"{minutos // 60} hr"
+
+
+def lista(itens: list) -> str:
+    """['a', 'b', 'c'] -> 'a, b or c' / 'a, b ou c'."""
+    if len(itens) < 2:
+        return "".join(itens)
+    return ", ".join(itens[:-1]) + t(" or ", " ou ") + itens[-1]
 
 
 # Textos fixos das páginas HTML. A mais longa é trocada primeiro.
@@ -97,6 +111,11 @@ FRASES = {
     "Replies instantly, day or night": "Responde na hora, de dia ou de noite",
     "Hey! What can we do for you, and when works for you?": "Oi! O que vamos fazer hoje, e qual horário fica bom pra você?",
     "A skin fade on Friday at 3pm": "Um degradê na sexta às 15h",
+    "A haircut tomorrow at 3pm": "Um corte amanhã às 15h",
+    "Scissor, clipper or fade, wash and style · 30 min": "Tesoura, máquina ou degradê, lavagem e finalização · 30 min",
+    "Shape, line-up and hot towel · 30 min": "Desenho, contorno e toalha quente · 30 min",
+    "The full reset · 1 hr": "O pacote completo · 1h",
+    "typing…": "digitando…",
     "How much is a beard trim?": "Quanto custa a barba?",
     "Send": "Enviar",
     "Scissor or clipper, wash and style": "Tesoura ou máquina, lavagem e finalização",
@@ -168,7 +187,7 @@ FRASES = {
     "back to demo": "voltar para a demonstração",
     # preços fixos das páginas, em reais
     "$35": "R$ 50", "$40": "R$ 60", "$20": "R$ 35", "$50": "R$ 80", "$25": "R$ 40",
-    "$49": "R$ 197", "$99": "R$ 297", "$990": "R$ 2.970",
+    "$49": "R$ 119", "$99": "R$ 199", "$990": "R$ 1.999",  # planos no Brasil
 }
 FRASES.update(SERVICOS_PT)
 
@@ -193,7 +212,8 @@ def pagina(doc: str) -> str:
         if parte.startswith("<script"):  # só as frases conhecidas dentro de aspas
             partes[i] = re.sub(r'"([^"\n]*)"', lambda m: '"' + frase(m.group(1)) + '"', parte)
             continue
-        parte = re.sub(r">([^<]+)<", lambda m: ">" + frase(m.group(1)) + "<", parte)
+        # re.sub(r"\s+", " ") junta textos que no HTML estão quebrados em várias linhas
+        parte = re.sub(r">([^<]+)<", lambda m: ">" + frase(re.sub(r"\s+", " ", m.group(1))) + "<", parte)
         parte = re.sub(r'((?:placeholder|aria-label|content|title|alt)=")([^"]*)"',
                        lambda m: m.group(1) + frase(m.group(2)) + '"', parte)
         partes[i] = parte

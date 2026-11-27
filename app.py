@@ -13,7 +13,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
 import traducao as tr
-from ia import SERVICOS, responder
+from ia import ABRE, FECHA, SERVICOS, primeiro_dia_util, responder
 
 PASTA = Path(__file__).parent
 ARQUIVO_AGENDA = PASTA / "agendamentos.json"
@@ -37,13 +37,13 @@ def slot_para_data(slot: str) -> datetime:
 
 def criar_exemplos() -> list:
     """Uma semana de exemplo, para o painel não aparecer vazio na demonstração."""
-    clientes = [("Andre", "Skin Fade", 1, 10), ("Chris", "Beard Trim", 1, 11), ("Maria (son)", "Kids Cut", 1, 15),
-                ("Kevin", "Haircut + Beard", 2, 9), ("Tyler", "Haircut", 2, 13), ("Omar", "Skin Fade", 3, 17)]
-    exemplos, base = [], datetime.now().replace(minute=0, second=0, microsecond=0)
+    # Amanhã às 15h já está ocupado (corte + barba, 1h): é o horário que a demo pede no chat
+    clientes = [("Andre", "Haircut", 1, 10), ("Chris", "Beard Trim", 1, 11), ("Maria", "Haircut", 1, 14),
+                ("Kevin", "Haircut + Beard", 1, 15), ("Tyler", "Haircut", 2, 13), ("Omar", "Haircut + Beard", 3, 17)]
+    exemplos = []
+    amanha = primeiro_dia_util(datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1))
     for nome, servico, dias, hora in clientes:
-        dia = base + timedelta(days=dias)
-        if dia.weekday() == 6:
-            dia += timedelta(days=1)
+        dia = primeiro_dia_util(amanha + timedelta(days=dias - 1))
         exemplos.append({"service": servico, "slot": dia.replace(hour=hora).strftime(FORMATO_SLOT),
                          "customer_name": nome, "phone": "(305) 555-01" + str(10 + len(exemplos)),
                          "booked_at": "2:14 AM" if nome == "Kevin" else "earlier"})
@@ -60,19 +60,35 @@ def salvar_agenda(agenda: list) -> None:
     ARQUIVO_AGENDA.write_text(json.dumps(agenda, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
-def horarios_livres() -> list:
-    """Horários dos próximos dias (seg-sáb, 9h-18h), sem os já ocupados."""
-    ocupados = {a["slot"] for a in carregar_agenda()}
+def blocos_ocupados() -> set:
+    """Cada agendamento ocupa blocos de 30 min conforme a duração do serviço (corte + barba = 2 blocos)."""
+    ocupados = set()
+    for a in carregar_agenda():
+        inicio = slot_para_data(a["slot"])
+        for minuto in range(0, SERVICOS.get(a["service"], {}).get("minutos", 30), 30):
+            ocupados.add(inicio + timedelta(minutes=minuto))
+    return ocupados
+
+
+def horarios_livres(minutos: int = 30, dias: int = 7) -> list:
+    """Horários de início livres nos próximos dias úteis (seg-sáb, 9h-19h) para um serviço de N minutos."""
+    ocupados = blocos_ocupados()
     livres = []
-    dia = datetime.now().replace(minute=0, second=0, microsecond=0) + timedelta(days=1)
-    while len(livres) < 60:
+    dia = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+    for _ in range(dias):
         if dia.weekday() != 6:  # domingo fechado
-            for hora in range(9, 19):
-                slot = dia.replace(hour=hora).strftime(FORMATO_SLOT)
-                if slot not in ocupados:
-                    livres.append(slot)
+            inicio = dia.replace(hour=ABRE)
+            while inicio + timedelta(minutes=minutos) <= dia.replace(hour=FECHA):
+                blocos = [inicio + timedelta(minutes=m) for m in range(0, minutos, 30)]
+                if not any(b in ocupados for b in blocos):
+                    livres.append(inicio.strftime(FORMATO_SLOT))
+                inicio += timedelta(minutes=30)
         dia += timedelta(days=1)
     return livres
+
+
+def livres_por_servico() -> dict:
+    return {nome: horarios_livres(s["minutos"]) for nome, s in SERVICOS.items()}
 
 
 def lembretes(agendamento: dict) -> list:
@@ -165,11 +181,11 @@ class Servidor(BaseHTTPRequestHandler):
         tamanho = int(self.headers.get("Content-Length", 0))
         conversa = json.loads(self.rfile.read(tamanho))["conversa"]
 
-        livres = horarios_livres()
+        livres = livres_por_servico()
         resultado = responder(conversa, livres)
 
-        # Nunca confiamos cegamente na IA: só agenda se o horário existir e estiver livre
-        if resultado["ready_to_book"] and resultado["slot"] in livres:
+        # Nunca confiamos cegamente na IA: só agenda se o horário existir e estiver livre para esse serviço
+        if resultado["ready_to_book"] and resultado["slot"] in livres.get(resultado["service"], []):
             agenda = carregar_agenda()
             novo = {k: resultado[k] for k in ["service", "slot", "customer_name", "phone"]}
             novo["booked_at"] = hora(datetime.now())

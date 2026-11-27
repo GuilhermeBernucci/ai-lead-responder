@@ -21,10 +21,10 @@ const roteiros = {
     en: [
       ["Hey! Let me show you something. This is a barbershop website with an assistant that books appointments on its own, day or night.",
         async (p) => { await p.goto(URL); }],
-      ["Watch this. A client types what they want, like a skin fade Friday at three. The assistant checks the real calendar and offers that time.",
+      ["Watch this. A client asks for a haircut tomorrow at three, but that time is already booked. So the assistant offers the closest open times, right there as buttons.",
         async (p) => { await p.click("#sugestoes button >> nth=0"); }],
-      ["Then it asks for a name and a phone number, and that's it, they're booked. Nobody had to pick up the phone, even at two in the morning.",
-        async (p) => { await p.type("#txt", "My name is Carlos, 305-555-0199", { delay: 45 }); await p.press("#txt", "Enter"); }],
+      ["The client taps one, sends a name and a phone number, and that's it, they're booked. Nobody had to pick up the phone, even at two in the morning.",
+        async (p) => { await escolherHorario(p); await p.type("#txt", "My name is Carlos, 305-555-0199", { delay: 45 }); await p.press("#txt", "Enter"); }],
       ["The rest of the site shows your services, your prices, your barbers and your reviews. And on the annual plan, I build this website for you, for free.",
         async (p) => { await rolar(p, 2600); }],
       ["Now, here's your side. Every appointment the assistant booked shows up right here, by day, with how much money is already on the calendar.",
@@ -37,17 +37,17 @@ const roteiros = {
     pt: [
       ["Oi! Deixa eu te mostrar uma coisa. Esse é um site de barbearia com um assistente que marca horário sozinho, de dia ou de madrugada.",
         async (p) => { await p.goto(URL); }],
-      ["Olha só. O cliente escreve o que quer, tipo um degradê na sexta às três. O assistente confere a agenda de verdade e oferece o horário.",
+      ["Olha só. O cliente pede um corte amanhã às três, mas esse horário já está ocupado. Aí o assistente oferece na hora os horários livres mais próximos, em botões.",
         async (p) => { await p.click("#sugestoes button >> nth=0"); }],
-      ["Aí ele pede o nome e o telefone, e pronto, tá marcado. Ninguém precisou atender o telefone, nem às duas da manhã.",
-        async (p) => { await p.type("#txt", "Meu nome é Carlos, (11) 98765-4321", { delay: 45 }); await p.press("#txt", "Enter"); }],
+      ["O cliente escolhe um, manda o nome e o telefone, e pronto, tá marcado. Ninguém precisou atender o telefone, nem às duas da manhã.",
+        async (p) => { await escolherHorario(p); await p.type("#txt", "Meu nome é Carlos, (11) 98765-4321", { delay: 45 }); await p.press("#txt", "Enter"); }],
       ["O resto do site mostra os serviços, os preços, os barbeiros e as avaliações. E no plano anual, eu faço esse site pra você, de graça.",
         async (p) => { await rolar(p, 2600); }],
       ["Agora, o seu lado. Tudo o que o assistente marcou aparece aqui, separado por dia, com quanto já tem de serviço na agenda.",
         async (p) => { await p.goto(URL + "/painel"); await espera(2500); await rolar(p, 500); }],
       ["Abrindo qualquer horário, você vê as mensagens que saem sozinhas: um lembrete na véspera, um aviso duas horas antes, e um convite pra voltar quatro semanas depois.",
         async (p) => { const s = p.locator("details summary").first(); await s.scrollIntoViewIfNeeded(); await s.click(); }],
-      ["Os planos são mensais, e no anual você ganha dois meses grátis e ainda leva o site. Quer parar de perder cliente? Bora conversar.",
+      ["Os planos começam em cento e dezenove reais por mês, e no anual você ganha dois meses grátis e ainda leva o site. Quer parar de perder cliente? Bora conversar.",
         async (p) => { await p.goto(URL + "/planos"); await espera(3000); await rolar(p, 400); }],
     ],
   },
@@ -82,6 +82,16 @@ const roteiros = {
     ],
   },
 };
+
+// Toca no horário livre do meio entre os que o assistente sugeriu
+async function escolherHorario(p) {
+  const botao = p.locator("#sugestoes button").nth(1);
+  await botao.waitFor({ timeout: 8000 });
+  await espera(600);
+  await botao.click();
+  await p.waitForFunction(() => document.querySelectorAll("#msgs .bot").length >= 3, null, { timeout: 8000 });
+  await espera(800);
+}
 
 async function rolar(p, total) {
   for (let i = 0; i < total; i += 20) { await p.mouse.wheel(0, 20); await espera(16); }
