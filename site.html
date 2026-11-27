@@ -3,76 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Summit Build & Remodel</title>
+<title>Vertex Build</title>
 <meta name="description" content="Kitchen and bathroom remodels, additions, roofing and decks in Dallas. Free on-site estimates.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
 <style>
-  :root { --ardosia: #1B2F68; --ardosia-escura: #12204a; --concreto: #F4E1D2; --cedro: #640119; --salvia: #b08f78; --branco: #fff; --texto: #1a2340; --cinza: #5b6075; }
+  /* Vertex Build: preto (fundo e cabeçalho), dourado (botões e destaques),
+     cinza escuro (seções secundárias), branco (textos e fundos claros) */
+  :root { --preto: #0B0B0B; --dourado: #D4AF37; --dourado-escuro: #b8962b; --cinza-escuro: #1F2937; --branco: #F8FAFC;
+          --linha: #2d3748; --suave: #9CA3AF; --texto-claro: #d1d5db; }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Archivo", system-ui, sans-serif; color: var(--texto); background: var(--branco); line-height: 1.55; }
+  body { margin: 0; font-family: "Archivo", system-ui, sans-serif; color: var(--branco); background: var(--preto); line-height: 1.55; }
   a { color: inherit; }
-  :focus-visible { outline: 3px solid var(--cedro); outline-offset: 2px; }
-  .demo-links { text-align: center; padding: 12px; font-size: 13px; background: var(--concreto); }
+  :focus-visible { outline: 3px solid var(--dourado); outline-offset: 2px; }
+  .demo-links { text-align: center; padding: 12px; font-size: 13px; background: var(--cinza-escuro); color: var(--texto-claro); }
 
-  .barra { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 1px solid #ead2bf; }
-  .logo { font-weight: 800; font-stretch: 125%; font-size: 20px; text-decoration: none; color: var(--ardosia); }
-  .logo small { display: block; font-weight: 500; font-stretch: 100%; font-size: 12px; color: var(--cinza); }
-  .barra .tel { font-weight: 700; text-decoration: none; color: var(--cedro); }
+  .barra { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; background: var(--preto); border-bottom: 1px solid var(--linha); }
+  .logo { font-weight: 800; font-stretch: 125%; font-size: 22px; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; color: var(--branco); }
+  .logo em { font-style: normal; color: var(--dourado); }
+  .logo small { display: block; font-weight: 500; font-stretch: 100%; font-size: 12px; letter-spacing: 0; text-transform: none; color: var(--suave); }
+  .barra .tel { font-weight: 700; text-decoration: none; color: var(--dourado); }
 
   /* Hero: título largo e pesado, como letreiro de obra, com o formulário ao lado */
-  /* Foto de fundo: GoodLifeConstruction / Unsplash. O degradê escuro deixa o texto legível. */
+  /* Foto de fundo: GoodLifeConstruction / Unsplash. O degradê preto deixa o texto legível. */
   .hero { padding: 56px max(28px, calc((100% - 1104px) / 2)) 72px; display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: start; color: var(--branco);
-          background: linear-gradient(90deg, rgba(18,32,74,.92) 0%, rgba(18,32,74,.7) 55%, rgba(18,32,74,.4) 100%),
-                      url("https://images.unsplash.com/photo-1771888703722-ee7ad9143a67?w=2000&q=70&auto=format&fit=crop") center / cover no-repeat, var(--ardosia); }
+          background: linear-gradient(90deg, rgba(11,11,11,.94) 0%, rgba(11,11,11,.75) 55%, rgba(11,11,11,.45) 100%),
+                      url("https://images.unsplash.com/photo-1771888703722-ee7ad9143a67?w=2000&q=70&auto=format&fit=crop") center / cover no-repeat, var(--preto); }
   .hero h1 { font-weight: 800; font-stretch: 125%; font-size: clamp(40px, 5.4vw, 68px); line-height: .98; letter-spacing: -.01em; margin: 8px 0 22px; color: var(--branco); }
-  .hero p.lead { font-size: 19px; color: #f7ece3; max-width: 30em; }
+  .hero p.lead { font-size: 19px; color: var(--texto-claro); max-width: 30em; }
   .provas { display: flex; gap: 32px; margin-top: 32px; flex-wrap: wrap; }
-  .provas div { border-left: 3px solid var(--cedro); padding-left: 12px; }
+  .provas div { border-left: 3px solid var(--dourado); padding-left: 12px; }
   .provas b { display: block; font-size: 22px; font-stretch: 112%; }
-  .provas span { font-size: 14px; color: #e8d9cc; }
+  .provas span { font-size: 14px; color: var(--suave); }
 
-  .form { background: var(--ardosia); color: var(--branco); border-radius: 6px; padding: 28px; }
+  .form { background: var(--cinza-escuro); color: var(--branco); border-radius: 6px; padding: 28px; border-top: 4px solid var(--dourado); }
   .form h2 { margin: 0 0 4px; font-stretch: 112%; font-size: 24px; }
-  .form p { margin: 0 0 8px; color: #e8d9cc; font-size: 15px; }
+  .form p { margin: 0 0 8px; color: var(--suave); font-size: 15px; }
   label { display: block; margin-top: 14px; font-weight: 600; font-size: 14px; }
-  input, textarea, select { width: 100%; padding: 11px; margin-top: 6px; border: 0; border-radius: 4px; font: inherit; font-size: 15px; background: var(--branco); color: var(--texto); }
+  input, textarea, select { width: 100%; padding: 11px; margin-top: 6px; border: 0; border-radius: 4px; font: inherit; font-size: 15px; background: var(--branco); color: var(--preto); }
   .linha { display: flex; gap: 12px; } .linha label { flex: 1; }
-  .form button { margin-top: 20px; width: 100%; padding: 14px; background: var(--cedro); color: var(--branco); border: 0; border-radius: 4px; font: inherit; font-weight: 700; font-size: 17px; cursor: pointer; }
-  .form button:hover { background: #4a0012; }
-  .form .nota { font-size: 13px; margin-top: 10px; color: #e8d9cc; }
+  .form button { margin-top: 20px; width: 100%; padding: 14px; background: var(--dourado); color: var(--preto); border: 0; border-radius: 4px; font: inherit; font-weight: 700; font-size: 17px; cursor: pointer; }
+  .form button:hover { background: var(--dourado-escuro); }
+  .form .nota { font-size: 13px; margin-top: 10px; color: var(--suave); }
 
   section { padding: 72px 28px; }
   .miolo { max-width: 1160px; margin: 0 auto; }
-  h2.titulo { font-weight: 800; font-stretch: 118%; font-size: 36px; margin: 0 0 32px; color: var(--ardosia); }
+  h2.titulo { font-weight: 800; font-stretch: 118%; font-size: 36px; margin: 0 0 32px; color: var(--branco); }
 
   /* Processo: é uma sequência real, por isso os números */
-  .processo { background: var(--concreto); }
+  .processo { background: var(--cinza-escuro); }
   .passos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; counter-reset: passo; }
-  .passo { counter-increment: passo; border-top: 3px solid var(--ardosia); padding-top: 14px; }
-  .passo::before { content: counter(passo); font-weight: 800; font-stretch: 125%; font-size: 40px; color: var(--cedro); }
+  .passo { counter-increment: passo; border-top: 3px solid var(--dourado); padding-top: 14px; }
+  .passo::before { content: counter(passo); font-weight: 800; font-stretch: 125%; font-size: 40px; color: var(--dourado); }
   .passo h3 { margin: 4px 0 6px; font-size: 18px; }
-  .passo p { margin: 0; color: var(--cinza); font-size: 15px; }
+  .passo p { margin: 0; color: var(--texto-claro); font-size: 15px; }
 
   /* Obras recentes: ficha técnica, como uma placa de obra */
   .obras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .obra { border: 1px solid #ead2bf; border-radius: 6px; overflow: hidden; }
-  .obra .faixa { height: 140px; background: repeating-linear-gradient(135deg, var(--salvia) 0 14px, #bd9c85 14px 28px); display: flex; align-items: flex-end; padding: 12px; }
-  .obra .faixa span { background: var(--branco); padding: 3px 8px; border-radius: 3px; font-size: 13px; font-weight: 600; }
-  .obra.b .faixa { background: repeating-linear-gradient(135deg, var(--cedro) 0 14px, #7a0a24 14px 28px); }
-  .obra.c .faixa { background: repeating-linear-gradient(135deg, var(--ardosia) 0 14px, #253c80 14px 28px); }
+  .obra { border: 1px solid var(--linha); border-radius: 6px; overflow: hidden; background: var(--cinza-escuro); }
+  .obra .faixa { height: 140px; background: repeating-linear-gradient(135deg, var(--dourado) 0 14px, #c29f2f 14px 28px); display: flex; align-items: flex-end; padding: 12px; }
+  .obra .faixa span { background: var(--preto); color: var(--branco); padding: 3px 8px; border-radius: 3px; font-size: 13px; font-weight: 600; }
+  .obra.b .faixa { background: repeating-linear-gradient(135deg, #374151 0 14px, #2d3748 14px 28px); }
+  .obra.c .faixa { background: repeating-linear-gradient(135deg, #1a1a1a 0 14px, #262626 14px 28px); }
   .obra .corpo { padding: 16px; }
   .obra h3 { margin: 0 0 8px; font-size: 18px; }
   .obra dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
-  .obra dt { color: var(--cinza); } .obra dd { margin: 0; font-weight: 600; }
+  .obra dt { color: var(--suave); } .obra dd { margin: 0; font-weight: 600; }
 
   .avaliacoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-  blockquote { margin: 0; font-size: 17px; }
-  blockquote footer { margin-top: 10px; font-size: 14px; color: var(--cinza); }
+  blockquote { margin: 0; font-size: 17px; border-left: 3px solid var(--dourado); padding-left: 16px; }
+  blockquote footer { margin-top: 10px; font-size: 14px; color: var(--suave); }
 
-  footer.rodape { background: var(--ardosia-escura); color: #e8d9cc; padding: 44px 28px; font-size: 15px; }
+  footer.rodape { background: var(--preto); color: var(--suave); padding: 44px 28px; font-size: 15px; border-top: 1px solid var(--linha); }
   .rodape .miolo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .rodape b { color: var(--branco); display: block; margin-bottom: 6px; }
+  .rodape b { color: var(--dourado); display: block; margin-bottom: 6px; }
 
   @media (max-width: 900px) {
     .hero, .passos, .obras, .avaliacoes, .rodape .miolo { grid-template-columns: 1fr; }
@@ -84,7 +88,7 @@
   <div class="demo-links">Demo for a fictional business · <a href="/painel">Open the owner dashboard</a></div>
 
   <header class="barra">
-    <a class="logo" href="/">Summit Build &amp; Remodel<small>Licensed and insured in Dallas since 2009</small></a>
+    <a class="logo" href="/">Vertex <em>Build</em><small>Licensed and insured in Dallas since 2009</small></a>
     <a class="tel" href="tel:2145550182">(214) 555-0182</a>
   </header>
 

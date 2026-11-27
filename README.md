@@ -11,7 +11,7 @@ When a homeowner requests an estimate on your website, the AI instantly:
 4. **Suggests the questions to ask** on the first call
 5. **Shows everything on an owner dashboard**, hottest leads first
 
-> Demo built for a **fictional** business, Summit Build & Remodel (Dallas, TX).
+> Demo built for a **fictional** business, Vertex Build (Dallas, TX).
 > The annual-plan website bonus looks like this demo site.
 
 | Contractor website + estimate form | What the homeowner gets | Owner dashboard |

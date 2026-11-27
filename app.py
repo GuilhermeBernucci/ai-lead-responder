@@ -1,5 +1,5 @@
 """
-Lead responder com IA para empreiteiros (cliente fictício: Summit Build & Remodel, Dallas).
+Lead responder com IA para empreiteiros (cliente fictício: Vertex Build, Dallas).
 
 - http://localhost:8000/          -> site da empresa, com o pedido de orçamento
 - http://localhost:8000/obrigado  -> o que o cliente vê depois de enviar (o e-mail que recebeu)

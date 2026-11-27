@@ -3,50 +3,50 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Summit Leads Dashboard</title>
+<title>Vertex Build · Leads</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
 <style>
-  :root { --ardosia: #1B2F68; --concreto: #F4E1D2; --cedro: #640119; --salvia: #b08f78; --cinza: #5b6075; --texto: #1a2340; }
+  :root { --ardosia: #0B0B0B; --concreto: #F8FAFC; --cedro: #8a6d12; --dourado: #D4AF37; --cinza-escuro: #1F2937; --cinza: #4b5563; --texto: #0B0B0B; }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Archivo", system-ui, sans-serif; color: var(--texto); background: #faf1ea; line-height: 1.5; }
+  body { margin: 0; font-family: "Archivo", system-ui, sans-serif; color: var(--texto); background: #F8FAFC; line-height: 1.5; }
   :focus-visible { outline: 3px solid var(--cedro); outline-offset: 2px; }
-  header { background: var(--ardosia); color: #e8d9cc; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
-  header b { color: #fff; font-stretch: 125%; font-weight: 800; }
-  header a { color: #e8d9cc; font-size: 14px; }
+  header { background: var(--ardosia); color: #d1d5db; border-bottom: 3px solid var(--dourado); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+  header b { color: #F8FAFC; font-stretch: 125%; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; } header b em { font-style: normal; color: var(--dourado); }
+  header a { color: var(--dourado); font-size: 14px; }
   main { max-width: 880px; margin: 0 auto; padding: 32px 20px 64px; }
   h1 { font-weight: 800; font-stretch: 118%; font-size: 36px; margin: 0; color: var(--ardosia); }
   .intro { color: var(--cinza); margin: 6px 0 24px; max-width: 40em; }
 
-  .como { background: #fff; border-radius: 8px; padding: 20px 24px; border: 1px solid #ead2bf; }
+  .como { background: #fff; border-radius: 8px; padding: 20px 24px; border: 1px solid #e5e7eb; }
   .como h2 { font-size: 17px; margin: 0 0 10px; }
   .como ol { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
-  .como li::marker { color: var(--cedro); font-weight: 700; }
+  .como li::marker { color: var(--dourado); font-weight: 700; }
 
   .grupo { margin-top: 40px; }
   .grupo h2 { font-stretch: 112%; font-size: 24px; margin: 0; display: flex; align-items: center; gap: 10px; }
   .conta { font-size: 14px; color: #fff; border-radius: 20px; padding: 1px 10px; }
-  .hot .conta { background: #640119; } .warm .conta { background: var(--cedro); } .cold .conta { background: var(--cinza); }
+  .hot .conta { background: var(--dourado); color: #0B0B0B; } .warm .conta { background: var(--cinza-escuro); } .cold .conta { background: #9CA3AF; }
   .explica { color: var(--cinza); margin: 4px 0 14px; max-width: 42em; }
 
   .lead { background: #fff; border-radius: 8px; padding: 18px 20px; margin-top: 12px; border-left: 5px solid var(--cinza); }
-  .hot .lead { border-left-color: #640119; } .warm .lead { border-left-color: var(--cedro); }
+  .hot .lead { border-left-color: var(--dourado); } .warm .lead { border-left-color: var(--cinza-escuro); }
   .lead-topo { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
   .lead-topo b { font-size: 18px; margin-right: 10px; }
   .lead-topo span { color: var(--cinza); }
   .ligar { background: var(--ardosia); color: #fff; text-decoration: none; padding: 7px 14px; border-radius: 4px; font-weight: 600; font-size: 14px; }
   .resumo { margin: 10px 0; }
-  dl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 0 0 8px; padding: 12px 0; border-top: 1px solid #f2e4d8; border-bottom: 1px solid #f2e4d8; }
+  dl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 0 0 8px; padding: 12px 0; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; }
   dt { font-size: 13px; color: var(--cinza); } dd { margin: 0; font-weight: 600; font-size: 15px; }
   summary { cursor: pointer; color: var(--cedro); font-weight: 600; font-size: 14px; margin-top: 8px; }
-  pre { white-space: pre-wrap; font: inherit; font-size: 14px; background: #fcf6f1; padding: 14px; border-radius: 6px; }
+  pre { white-space: pre-wrap; font: inherit; font-size: 14px; background: #f1f5f9; padding: 14px; border-radius: 6px; }
   .nada { color: var(--cinza); background: #fff; border-radius: 8px; padding: 14px 18px; }
 
   @media (max-width: 700px) { dl { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
-  <header><b>Summit Build &amp; Remodel</b><a href="/">Back to your website</a></header>
+  <header><b>Vertex <em>Build</em></b><a href="/">Back to your website</a></header>
   <main>
     <h1>Your leads, Dana</h1>
     <p class="intro">Every estimate request from your website lands here. Your assistant has already replied to each homeowner and sorted them by how ready they are to hire, so you know who to call first.</p>

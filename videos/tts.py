@@ -39,6 +39,8 @@ def elevenlabs():
             "similarity_boost": 0.8,
             "style": 0.2,
             "use_speaker_boost": True,
+            # 0.7 a 1.2; algumas vozes da biblioteca falam devagar demais em 1.0
+            "speed": float(os.environ.get("ELEVENLABS_VELOCIDADE", "1.0")),
         },
     }
     pedido = urllib.request.Request(

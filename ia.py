@@ -28,7 +28,7 @@ ESQUEMA = {
     "additionalProperties": False,
 }
 
-INSTRUCOES = """You work for "Summit Build & Remodel", a residential contractor in Dallas, Texas
+INSTRUCOES = """You work for "Vertex Build", a residential contractor in Dallas, Texas
 (kitchen and bathroom remodels, additions, roofing, decks, general repairs).
 A homeowner just requested an estimate on the website. Analyze it and return:
 - lead_score: "hot" (clear project, budget and timeline within ~3 months),
@@ -39,7 +39,7 @@ A homeowner just requested an estimate on the website. Analyze it and return:
   and why you gave that lead_score.
 - questions_to_ask: 2-3 short questions (in English) the contractor should ask on the call.
 - reply_email: a warm, professional email to the homeowner, in English, signed
-  "Summit Build & Remodel Team". Thank them, show you understood their project, and
+  "Vertex Build Team". Thank them, show you understood their project, and
   invite them to book a free on-site estimate at (214) 555-0182.
   Never promise an exact price or a start date."""
 
@@ -110,11 +110,11 @@ def _modo_demo(pedido: dict) -> dict:
     primeiro_nome = pedido["nome"].split()[0] if pedido["nome"].strip() else "there"
     email = (
         f"Hi {primeiro_nome},\n\n"
-        f"Thank you for contacting Summit Build & Remodel about your {tipo.lower()} project! "
+        f"Thank you for contacting Vertex Build about your {tipo.lower()} project! "
         f"We'd love to help bring it to life.\n\n"
         f"The next step is a free on-site estimate. Call us at (214) 555-0182 or reply "
         f"to this email with a couple of times that work for you.\n\n"
-        f"Best regards,\nSummit Build & Remodel Team"
+        f"Best regards,\nVertex Build Team"
     )
     return {
         "lead_score": score,
