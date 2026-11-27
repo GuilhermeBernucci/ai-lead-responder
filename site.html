@@ -8,79 +8,84 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --teal: #000000; --teal-escuro: #0d0d0d; --rosa: #CFE6A9; --espuma: #CFE6A9;
-    --latao: #B57C4C; --tinta: #1a1a1a; --branco: #ffffff;
-  }
+  /* Paleta Black Crown: #010700 fundo, #1D0601 seções e cartões (#260802 no hover),
+     #2F2F2F botões e ações (#3E3E3E no hover), #F8F9FA e #C4C9CE textos, #0D0E0F bordas e detalhes */
+  :root { --fundo: #010700; --cartao: #1D0601; --cartao-hover: #260802; --botao: #2F2F2F; --botao-hover: #3E3E3E;
+          --texto: #F8F9FA; --texto-2: #C4C9CE; --borda: #0D0E0F; }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Work Sans", system-ui, sans-serif; color: var(--tinta); background: var(--branco); line-height: 1.55; }
+  body { margin: 0; font-family: "Work Sans", system-ui, sans-serif; color: var(--texto); background: var(--fundo); line-height: 1.55; }
   a { color: inherit; }
-  :focus-visible { outline: 3px solid var(--latao); outline-offset: 2px; }
+  :focus-visible { outline: 3px solid var(--texto-2); outline-offset: 2px; }
 
   /* Topo */
-  .barra { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; background: var(--teal-escuro); color: var(--espuma); font-size: 14px; }
-  .barra .logo { font-family: "Poiret One", sans-serif; font-size: 24px; color: var(--branco); letter-spacing: .04em; text-decoration: none; }
+  .barra { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; background: var(--fundo); color: var(--texto-2); font-size: 14px; border-bottom: 1px solid var(--borda); }
+  .barra .logo { font-family: "Poiret One", sans-serif; font-size: 24px; color: var(--texto); letter-spacing: .04em; text-decoration: none; }
   .barra nav a { margin-left: 18px; text-decoration: none; }
+  .barra nav a:hover { color: var(--texto); }
 
-  /* Hero: o raio de sol Art Deco atrás, o chat como peça principal */
-  .hero { position: relative; overflow: hidden; color: var(--branco); padding: 56px 24px 72px;
-          /* Foto: Mustafa Sheikhmouss / Unsplash. O degradê preto deixa o texto legível. */
-          background: linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.6) 55%, rgba(0,0,0,.35) 100%),
-                      url("https://images.unsplash.com/photo-1792523227995-9ac04cf1d94d?w=2000&q=70&auto=format&fit=crop") center / cover no-repeat, var(--teal); }
+  /* Hero: foto da barbearia, o chat como peça principal */
+  .hero { position: relative; overflow: hidden; color: var(--texto); padding: 56px 24px 72px;
+          /* Foto: Mustafa Sheikhmouss / Unsplash. O degradê escuro deixa o texto legível. */
+          background: linear-gradient(90deg, rgba(1,7,0,.92) 0%, rgba(1,7,0,.65) 55%, rgba(1,7,0,.35) 100%),
+                      url("https://images.unsplash.com/photo-1792523227995-9ac04cf1d94d?w=2000&q=70&auto=format&fit=crop") center / cover no-repeat, var(--fundo); }
   .hero-grade { position: relative; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 48px; align-items: center; }
   .hero h1 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: clamp(44px, 7vw, 84px); line-height: 1; margin: 0 0 20px; }
-  .hero p { font-size: 18px; max-width: 30em; color: var(--espuma); }
-  .hero .horario { margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(207,230,169,.35); font-size: 15px; }
+  .hero p { font-size: 18px; max-width: 30em; color: var(--texto-2); }
+  .hero .horario { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--botao); font-size: 15px; }
 
   /* Chat */
-  .chat { background: var(--branco); color: var(--tinta); border-radius: 22px 22px 22px 4px; box-shadow: 0 24px 60px rgba(0,0,0,.45); overflow: hidden; display: flex; flex-direction: column; }
-  .chat-topo { background: var(--rosa); padding: 14px 18px; }
+  .chat { background: var(--cartao); color: var(--texto); border: 1px solid var(--borda); border-radius: 22px 22px 22px 4px; box-shadow: 0 24px 60px rgba(0,0,0,.6); overflow: hidden; display: flex; flex-direction: column; }
+  .chat-topo { background: var(--botao); padding: 14px 18px; }
   .chat-topo b { display: block; font-size: 16px; }
-  .chat-topo span { font-size: 13px; }
+  .chat-topo span { font-size: 13px; color: var(--texto-2); }
   #msgs { height: 300px; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
   .m { max-width: 86%; padding: 9px 13px; border-radius: 16px; font-size: 14px; }
-  .bot { background: #f2f8e8; align-self: flex-start; border-bottom-left-radius: 4px; }
-  .eu { background: var(--latao); color: var(--branco); align-self: flex-end; border-bottom-right-radius: 4px; }
-  .digitando { color: #6b6b6b; font-style: italic; }
+  .bot { background: var(--cartao-hover); color: var(--texto); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--borda); }
+  .eu { background: var(--botao); color: var(--texto); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .digitando { color: var(--texto-2); font-style: italic; }
   .sugestoes { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 14px 10px; }
   .sugestoes[hidden] { display: none; }
-  .sugestoes button { border: 1px solid var(--espuma); background: var(--branco); border-radius: 20px; padding: 5px 11px; font: inherit; font-size: 13px; cursor: pointer; color: var(--latao); }
-  .chat form { display: flex; border-top: 1px solid #e7eedc; }
-  .chat input { flex: 1; border: 0; padding: 14px; font: inherit; }
+  .sugestoes button { border: 1px solid var(--borda); background: var(--botao); border-radius: 20px; padding: 5px 11px; font: inherit; font-size: 13px; cursor: pointer; color: var(--texto); }
+  .sugestoes button:hover { background: var(--botao-hover); }
+  .chat form { display: flex; border-top: 1px solid var(--borda); }
+  .chat input { flex: 1; border: 0; padding: 14px; font: inherit; background: var(--fundo); color: var(--texto); }
+  .chat input::placeholder { color: var(--texto-2); }
   .chat input:focus { outline: none; }
-  .chat form button { border: 0; background: var(--latao); color: var(--branco); padding: 0 18px; font: inherit; font-weight: 600; cursor: pointer; }
+  .chat form button { border: 0; background: var(--botao); color: var(--texto); padding: 0 18px; font: inherit; font-weight: 600; cursor: pointer; }
+  .chat form button:hover { background: var(--botao-hover); }
 
   section { padding: 72px 24px; }
   .miolo { max-width: 1080px; margin: 0 auto; }
-  h2 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 40px; margin: 0 0 28px; color: var(--latao); }
+  h2 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 40px; margin: 0 0 28px; color: var(--texto); }
 
   /* Serviços: lista de preços como cardápio de barbearia */
   .precos { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 56px; }
   .item { display: flex; align-items: baseline; gap: 10px; padding: 12px 0; }
   .item .nome { font-weight: 600; }
-  .item .pontos { flex: 1; border-bottom: 2px dotted #d9bfa6; transform: translateY(-4px); }
-  .item small { display: block; color: #5c5c5c; font-size: 14px; }
+  .item .pontos { flex: 1; border-bottom: 2px dotted var(--botao); transform: translateY(-4px); }
+  .item small { display: block; color: var(--texto-2); font-size: 14px; }
 
   /* Barbeiros */
-  .equipe { background: var(--espuma); }
-  .equipe h2 { color: var(--tinta); }  /* caramelo some no fundo verde */
+  .equipe { background: var(--cartao); border-top: 1px solid var(--borda); border-bottom: 1px solid var(--borda); }
   .barbeiros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .barbeiro .foto { aspect-ratio: 4/5; border-radius: 120px 120px 8px 8px; background: var(--latao); display: grid; place-items: center;
-                    color: var(--teal); font-family: "Poiret One", sans-serif; font-size: 64px; }
+  .barbeiro .foto { aspect-ratio: 4/5; border-radius: 120px 120px 8px 8px; background: var(--cartao-hover); border: 1px solid var(--borda); display: grid; place-items: center;
+                    color: var(--texto-2); font-family: "Poiret One", sans-serif; font-size: 64px; transition: background .2s; }
+  .barbeiro:hover .foto { background: var(--botao); }
   .barbeiro h3 { margin: 14px 0 2px; }
-  .barbeiro p { margin: 0; color: #333333; font-size: 15px; }
+  .barbeiro p { margin: 0; color: var(--texto-2); font-size: 15px; }
 
   /* Avaliações */
   .avaliacoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-  blockquote { margin: 0; font-size: 17px; }
-  blockquote footer { margin-top: 10px; font-size: 14px; color: #5c5c5c; }
-  .estrelas { color: var(--latao); letter-spacing: 2px; }
+  blockquote { margin: 0; font-size: 17px; background: var(--cartao); border: 1px solid var(--borda); border-radius: 12px; padding: 20px; transition: background .2s; }
+  blockquote:hover { background: var(--cartao-hover); }
+  blockquote footer { margin-top: 10px; font-size: 14px; color: var(--texto-2); }
+  .estrelas { color: var(--texto); letter-spacing: 2px; }
 
   /* Rodapé */
-  footer.rodape { background: var(--teal-escuro); color: var(--espuma); padding: 48px 24px; }
+  footer.rodape { background: var(--cartao); color: var(--texto-2); padding: 48px 24px; border-top: 1px solid var(--borda); }
   .rodape .miolo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; font-size: 15px; }
-  .rodape b { color: var(--branco); display: block; margin-bottom: 6px; }
-  .demo-links { text-align: center; padding: 14px; font-size: 13px; background: var(--rosa); }
+  .rodape b { color: var(--texto); display: block; margin-bottom: 6px; }
+  .demo-links { text-align: center; padding: 14px; font-size: 13px; background: var(--cartao); color: var(--texto-2); }
 
   @media (max-width: 860px) {
     .hero-grade, .precos, .barbeiros, .avaliacoes, .rodape .miolo { grid-template-columns: 1fr; }

@@ -22,8 +22,8 @@ Pages: `/` website with booking chat · `/painel` owner dashboard · `/planos` p
 
 ## Video walkthroughs
 
-- 🇺🇸 English: [videos/barbearia-en.mp4](videos/barbearia-en.mp4) (77s)
-- 🇧🇷 Português: [videos/barbearia-pt.mp4](videos/barbearia-pt.mp4) (56s)
+- 🇺🇸 English: [videos/barbearia-en.mp4](videos/barbearia-en.mp4) (79s)
+- 🇧🇷 Português: [videos/barbearia-pt.mp4](videos/barbearia-pt.mp4) (58s)
 
 Recorded automatically with `videos/gravar.js` (Playwright + narration). To re-record after changing the site:
 start the app, then run `TTS_SCRIPT=videos/tts.py node videos/gravar.js barbearia en videos`.

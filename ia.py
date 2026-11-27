@@ -123,11 +123,12 @@ def _modo_demo(conversa: list, horarios_livres: list) -> dict:
 
     nome_match = re.search(r"(?:my name is|i'm|i am|name:|meu nome é|me chamo|sou o|sou a)\s+([a-zà-ú]+)", texto)
     nome = nome_match.group(1).title() if nome_match else ""
-    tel_match = re.search(r"(\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})", texto)
+    # EUA: (305) 555-0199 · Brasil: (11) 98765-4321
+    tel_match = re.search(r"(\(?\d{2,3}\)?[\s.-]?9?\d{3,4}[\s.-]?\d{4})", texto)
     telefone = tel_match.group(1) if tel_match else ""
 
     if not servico:
-        lista = ", ".join(f"{tr.servico(n)} (${s['preco']})" for n, s in SERVICOS.items())
+        lista = ", ".join(f"{tr.servico(n)} ({tr.moeda(tr.preco(n, s['preco']))})" for n, s in SERVICOS.items())
         reply = tr.t(f"Hey! 👋 Welcome to Black Crown. What can we do for you today? We offer: {lista}.",
                      f"Oi! 👋 Bem-vindo à Black Crown. O que vamos fazer hoje? Temos: {lista}.")
     elif not slot:

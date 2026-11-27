@@ -7,48 +7,52 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --teal: #000000; --teal-escuro: #0d0d0d; --rosa: #CFE6A9; --espuma: #CFE6A9; --latao: #B57C4C; --tinta: #1a1a1a; --cinza: #5c5c5c; }
+  /* Paleta Black Crown: #010700 fundo, #1D0601 seções e cartões (#260802 no hover),
+     #2F2F2F botões e ações (#3E3E3E no hover), #F8F9FA e #C4C9CE textos, #0D0E0F bordas e detalhes */
+  :root { --fundo: #010700; --cartao: #1D0601; --cartao-hover: #260802; --botao: #2F2F2F; --botao-hover: #3E3E3E;
+          --texto: #F8F9FA; --texto-2: #C4C9CE; --borda: #0D0E0F; }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Work Sans", system-ui, sans-serif; color: var(--tinta); background: #f7f9f2; line-height: 1.5; }
-  :focus-visible { outline: 3px solid var(--latao); outline-offset: 2px; }
-  header { background: var(--teal-escuro); color: var(--espuma); padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; }
-  header .logo { font-family: "Poiret One", sans-serif; font-size: 24px; color: #fff; }
-  header a { color: var(--espuma); font-size: 14px; }
+  body { margin: 0; font-family: "Work Sans", system-ui, sans-serif; color: var(--texto); background: var(--fundo); line-height: 1.5; }
+  :focus-visible { outline: 3px solid var(--texto-2); outline-offset: 2px; }
+  header { background: var(--fundo); color: var(--texto-2); padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--borda); }
+  header .logo { font-family: "Poiret One", sans-serif; font-size: 24px; color: var(--texto); }
+  header a { color: var(--texto-2); font-size: 14px; }
   main { max-width: 860px; margin: 0 auto; padding: 32px 20px 64px; }
-  h1 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 40px; margin: 0; color: var(--latao); }
-  .intro { color: var(--cinza); margin: 6px 0 28px; max-width: 38em; }
+  h1 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 40px; margin: 0; color: var(--texto); }
+  .intro { color: var(--texto-2); margin: 6px 0 28px; max-width: 38em; }
 
   /* Como funciona: é uma sequência de verdade, então numeramos */
-  .como { background: #fff; border: 1px solid #e3ead6; border-radius: 14px; padding: 20px 24px; margin-bottom: 28px; }
+  .como { background: var(--cartao); border: 1px solid var(--borda); border-radius: 14px; padding: 20px 24px; margin-bottom: 28px; }
   .como h2 { font-size: 17px; margin: 0 0 12px; }
-  .como ol { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
-  .como li::marker { color: var(--teal); font-weight: 600; }
+  .como ol { margin: 0; padding-left: 22px; display: grid; gap: 8px; color: var(--texto-2); }
+  .como li::marker { color: var(--texto); font-weight: 600; }
 
-  .numeros { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #e3ead6; border: 1px solid #e3ead6; border-radius: 14px; overflow: hidden; margin-bottom: 36px; }
-  .numeros div { background: #fff; padding: 18px; }
-  .numeros strong { display: block; font-size: 30px; color: var(--latao); font-weight: 600; }
-  .numeros span { font-size: 14px; color: var(--cinza); }
+  .numeros { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--borda); border: 1px solid var(--borda); border-radius: 14px; overflow: hidden; margin-bottom: 36px; }
+  .numeros div { background: var(--cartao); padding: 18px; }
+  .numeros strong { display: block; font-size: 30px; color: var(--texto); font-weight: 600; }
+  .numeros span { font-size: 14px; color: var(--texto-2); }
 
-  .dia { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 26px; color: var(--latao); margin: 32px 0 10px; }
-  .lista { border-left: 3px solid var(--espuma); padding-left: 18px; display: grid; gap: 10px; }
-  .horario { display: grid; grid-template-columns: 84px 1fr; gap: 14px; background: #fff; border-radius: 12px; padding: 14px 16px; border: 1px solid #e7eedc; }
-  .horario time { font-weight: 600; color: var(--teal); }
-  .tel { display: block; color: var(--cinza); font-size: 14px; }
-  summary { cursor: pointer; color: var(--teal); font-size: 14px; margin-top: 6px; font-weight: 500; }
+  .dia { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 26px; color: var(--texto); margin: 32px 0 10px; }
+  .lista { border-left: 3px solid var(--botao); padding-left: 18px; display: grid; gap: 10px; }
+  .horario { display: grid; grid-template-columns: 84px 1fr; gap: 14px; background: var(--cartao); border-radius: 12px; padding: 14px 16px; border: 1px solid var(--borda); transition: background .2s; }
+  .horario:hover { background: var(--cartao-hover); }
+  .horario time { font-weight: 600; color: var(--texto); }
+  .tel { display: block; color: var(--texto-2); font-size: 14px; }
+  summary { cursor: pointer; color: var(--texto); font-size: 14px; margin-top: 6px; font-weight: 500; }
   details[open] summary { margin-bottom: 8px; }
 
   /* Linha do tempo dos lembretes */
   .linha { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .linha li { position: relative; padding-left: 22px; font-size: 14px; }
-  .linha li::before { content: ""; position: absolute; left: 4px; top: 6px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--latao); background: #fff; }
-  .linha li.sent::before { background: var(--latao); }
-  .linha li:not(:last-child)::after { content: ""; position: absolute; left: 9px; top: 18px; bottom: -12px; border-left: 1px dashed #B57C4C; }
-  .motivo { background: #f5e9df; color: #8a5530; border-radius: 10px; padding: 1px 8px; font-size: 12px; margin-left: 6px; }
-  q { display: block; color: var(--cinza); margin-top: 3px; quotes: "“" "”"; }
+  .linha li::before { content: ""; position: absolute; left: 4px; top: 6px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--texto-2); background: var(--fundo); }
+  .linha li.sent::before { background: var(--texto-2); }
+  .linha li:not(:last-child)::after { content: ""; position: absolute; left: 9px; top: 18px; bottom: -12px; border-left: 1px dashed var(--botao-hover); }
+  .motivo { background: var(--botao); color: var(--texto-2); border-radius: 10px; padding: 1px 8px; font-size: 12px; margin-left: 6px; }
+  q { display: block; color: var(--texto-2); margin-top: 3px; quotes: "“" "”"; }
 
-  .dica { margin-top: 40px; background: var(--rosa); border-radius: 14px; padding: 18px 22px; }
-  .dica b { display: block; margin-bottom: 4px; }
-  .vazio { background: #fff; padding: 20px; border-radius: 12px; }
+  .dica { margin-top: 40px; background: var(--cartao); border: 1px solid var(--borda); border-radius: 14px; padding: 18px 22px; color: var(--texto-2); }
+  .dica b { display: block; margin-bottom: 4px; color: var(--texto); }
+  .vazio { background: var(--cartao); padding: 20px; border-radius: 12px; }
 
   @media (max-width: 700px) {
     .numeros { grid-template-columns: 1fr 1fr; }

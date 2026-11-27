@@ -40,7 +40,7 @@ const roteiros = {
       ["Olha só. O cliente escreve o que quer, tipo um degradê na sexta às três. O assistente confere a agenda de verdade e oferece o horário.",
         async (p) => { await p.click("#sugestoes button >> nth=0"); }],
       ["Aí ele pede o nome e o telefone, e pronto, tá marcado. Ninguém precisou atender o telefone, nem às duas da manhã.",
-        async (p) => { await p.type("#txt", "Meu nome é Carlos, 305-555-0199", { delay: 45 }); await p.press("#txt", "Enter"); }],
+        async (p) => { await p.type("#txt", "Meu nome é Carlos, (11) 98765-4321", { delay: 45 }); await p.press("#txt", "Enter"); }],
       ["O resto do site mostra os serviços, os preços, os barbeiros e as avaliações. E no plano anual, eu faço esse site pra você, de graça.",
         async (p) => { await rolar(p, 2600); }],
       ["Agora, o seu lado. Tudo o que o assistente marcou aparece aqui, separado por dia, com quanto já tem de serviço na agenda.",

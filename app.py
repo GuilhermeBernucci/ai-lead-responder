@@ -110,13 +110,13 @@ def pagina(nome_arquivo: str, conteudo: str = "") -> str:
 
 def montar_painel() -> str:
     agenda = sorted(carregar_agenda(), key=lambda a: slot_para_data(a["slot"]))
-    total = sum(SERVICOS.get(a["service"], {}).get("preco", 0) for a in agenda)
+    total = sum(tr.preco(a["service"], SERVICOS.get(a["service"], {}).get("preco", 0)) for a in agenda)
     fora_do_horario = sum(1 for a in agenda if loja_fechada(a.get("booked_at", "")))
 
     partes = [f"""
     <section class="numeros" aria-label="{tr.t('This week at a glance', 'Resumo da semana')}">
       <div><strong>{len(agenda)}</strong><span>{tr.t('appointments booked by your assistant', 'horários marcados pelo seu assistente')}</span></div>
-      <div><strong>${total}</strong><span>{tr.t('in services on the calendar', 'em serviços na agenda')}</span></div>
+      <div><strong>{tr.moeda(total)}</strong><span>{tr.t('in services on the calendar', 'em serviços na agenda')}</span></div>
       <div><strong>{len(agenda) * 3}</strong><span>{tr.t("text messages scheduled, so you don't have to send them", 'mensagens programadas, que você não precisa mandar')}</span></div>
       <div><strong>{fora_do_horario}</strong><span>{tr.t('booked while the shop was closed', 'marcados com a barbearia fechada')}</span></div>
     </section>"""]
@@ -139,13 +139,13 @@ def montar_painel() -> str:
             passos.append(f"""<li class="{estado}"><b>{nome}</b> · {tr.dia(quando, curto=True)}, {tr.hora(quando)}
               <span class="motivo">{motivo}</span><q>{html.escape(texto)}</q></li>""")
 
-        preco = SERVICOS.get(a["service"], {}).get("preco", "?")
+        preco = tr.moeda(tr.preco(a["service"], SERVICOS.get(a["service"], {}).get("preco", 0)))
         partes.append(f"""
         <article class="horario">
           <time>{tr.hora(inicio)}</time>
           <div class="info">
-            <b>{html.escape(a['customer_name'])}</b> · {html.escape(tr.servico(a['service']))} · ${preco}
-            <span class="tel">{html.escape(a['phone'])}</span>
+            <b>{html.escape(a['customer_name'])}</b> · {html.escape(tr.servico(a['service']))} · {preco}
+            <span class="tel">{html.escape(tr.telefone(a['phone']))}</span>
             <details><summary>{tr.t('What happens next with this client', 'O que acontece agora com este cliente')}</summary><ol class="linha">{''.join(passos)}</ol></details>
           </div>
         </article>""")

@@ -29,6 +29,29 @@ DIAS_PT = ["segunda", "terça", "quarta", "quinta", "sexta", "sábado", "domingo
 MESES_PT = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"]
 
 
+# Preços em reais para a versão brasileira (os em dólar ficam no ia.py)
+PRECOS_BRL = {"Haircut": 50, "Skin Fade": 60, "Beard Trim": 35, "Haircut + Beard": 80, "Kids Cut": 40}
+
+
+def preco(nome_servico: str, preco_usd: int) -> int:
+    return PRECOS_BRL.get(nome_servico, preco_usd) if EM_PT else preco_usd
+
+
+def moeda(valor: int) -> str:
+    """'$35' em inglês, 'R$ 50' em português (com ponto de milhar)."""
+    return f"R$ {valor:,}".replace(",", ".") if EM_PT else f"${valor:,}"
+
+
+_TEL_US = re.compile(r"\((\d{3})\)\s?(\d{3})-(\d{4})|\b(\d{3})-(\d{3})-(\d{4})\b")
+
+
+def telefone(texto: str) -> str:
+    """Em PT troca telefones americanos, (305) 555-0123, por brasileiros com DDD: (11) 98555-0123."""
+    if not EM_PT:
+        return texto
+    return _TEL_US.sub(lambda m: f"(11) 98{m.group(2) or m.group(5)}-{m.group(3) or m.group(6)}", texto)
+
+
 def servico(nome: str) -> str:
     return SERVICOS_PT.get(nome, nome) if EM_PT else nome
 
@@ -143,6 +166,9 @@ FRASES = {
     "for your shop, built with your services, prices, photos and reviews, with the AI booking chat already inside.":
         "para a sua barbearia, feito com seus serviços, preços, fotos e avaliações, já com o chat de agendamento com IA.",
     "back to demo": "voltar para a demonstração",
+    # preços fixos das páginas, em reais
+    "$35": "R$ 50", "$40": "R$ 60", "$20": "R$ 35", "$50": "R$ 80", "$25": "R$ 40",
+    "$49": "R$ 197", "$99": "R$ 297", "$990": "R$ 2.970",
 }
 FRASES.update(SERVICOS_PT)
 
@@ -152,7 +178,7 @@ _padrao = re.compile("|".join(
 
 
 def frase(texto: str) -> str:
-    return _padrao.sub(lambda m: FRASES[m.group(0)], texto) if EM_PT else texto
+    return telefone(_padrao.sub(lambda m: FRASES[m.group(0)], texto)) if EM_PT else texto
 
 
 def pagina(doc: str) -> str:
