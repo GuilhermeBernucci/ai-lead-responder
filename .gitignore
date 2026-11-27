@@ -1,3 +1,5 @@
 __pycache__/
 agendamentos.json
+agendamentos-*.json
+configuracao-*.json
 .env

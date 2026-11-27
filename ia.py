@@ -3,7 +3,7 @@ O "cérebro" do assistente de agendamento.
 
 A cada mensagem do cliente, a IA recebe:
   - a conversa até agora
-  - os serviços da barbearia (com preço e duração)
+  - os serviços que o dono cadastrou em /agenda (com preço e duração)
   - os horários livres para cada serviço
 e devolve um "formulário" (JSON) com a resposta, os botões de opção e, quando tiver tudo, o agendamento.
 
@@ -17,16 +17,10 @@ import os
 import re
 from datetime import datetime, timedelta
 
+import agenda
 import traducao as tr
 
-# Duração em minutos: a agenda anda de 30 em 30, então corte + barba ocupa dois blocos
-SERVICOS = {
-    "Haircut": {"preco": 35, "minutos": 30},
-    "Beard Trim": {"preco": 20, "minutos": 30},
-    "Haircut + Beard": {"preco": 50, "minutos": 60},
-}
-FORMATO_SLOT = "%A %b %d %H:%M"  # ex.: "Friday Nov 27 15:30"
-ABRE, FECHA = 9, 19  # seg a sáb, 9h às 19h
+FORMATO_SLOT = agenda.FORMATO_SLOT
 
 # A IA sempre devolve estes campos. Campo vazio ("") = ainda não sabemos.
 ESQUEMA = {
@@ -76,13 +70,14 @@ def responder(conversa: list, livres: dict) -> dict:
 def _modo_real(conversa: list, livres: dict) -> dict:
     import anthropic
 
-    servicos = "\n".join(f"- {n}: ${s['preco']}, {s['minutos']} min" for n, s in SERVICOS.items())
-    horarios = "\n\n".join(f"{n}:\n" + "\n".join(livres.get(n, [])[:40]) for n in SERVICOS)
+    servicos = agenda.servicos()
+    lista = "\n".join(f"- {n}: {tr.moeda(s['preco'])}, {s['minutos']} min" for n, s in servicos.items())
+    horarios = "\n\n".join(f"{n}:\n" + "\n".join(livres.get(n, [])[:40]) for n in servicos)
     client = anthropic.Anthropic()
     resposta = client.beta.messages.create(
         model="claude-opus-5-5",
         max_tokens=16000,
-        system=INSTRUCOES.format(idioma=tr.t("English", "Brazilian Portuguese"), servicos=servicos, horarios=horarios),
+        system=INSTRUCOES.format(idioma=tr.t("English", "Brazilian Portuguese"), servicos=lista, horarios=horarios),
         messages=conversa,
         output_config={"effort": "low", "format": {"type": "json_schema", "schema": ESQUEMA}},
         betas=["server-side-fallback-2026-07-01"],
@@ -96,52 +91,52 @@ def _modo_real(conversa: list, livres: dict) -> dict:
 
 # ---------------- MODO DEMO (regras simples) ----------------
 
-PALAVRAS_SERVICO = [  # a ordem importa: o mais específico primeiro
-    ("Haircut + Beard", ["cut and beard", "haircut and beard", "cut + beard", "both",
-                         "corte e barba", "corte + barba", "cabelo e barba"]),
-    ("Beard Trim", ["beard", "barba"]),
-    ("Haircut", ["haircut", "cut", "trim", "fade", "corte", "cortar", "degradê", "degrade", "cabelo"]),
-]
+# Palavras que indicam cada "parte" de um serviço. Um serviço é reconhecido pelas partes do nome dele:
+# "Corte e barba" tem as partes {corte, barba}; se o cliente fala "cabelo e barba", também tem as duas.
+PARTES = {
+    "corte": ["haircut", "cut", "hair", "fade", "corte", "cortar", "cabelo", "degradê", "degrade"],
+    "barba": ["beard", "barba"],
+}
 DIAS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 DIAS_PT = {"segunda": 0, "terça": 1, "terca": 1, "quarta": 2, "quinta": 3,
            "sexta": 4, "sábado": 5, "sabado": 5, "domingo": 6}
 
 
-def para_data(slot: str) -> datetime:
-    agora = datetime.now()
-    data = datetime.strptime(f"{agora.year} {slot}", f"%Y {FORMATO_SLOT}")
-    if data < agora - timedelta(days=60):  # virada de ano
-        data = data.replace(year=agora.year + 1)
-    return data
-
-
-def primeiro_dia_util(a_partir: datetime) -> datetime:
-    dia = a_partir
-    while dia.weekday() == 6:  # domingo fechado
-        dia += timedelta(days=1)
-    return dia
+def _partes(texto: str) -> set:
+    return {parte for parte, palavras in PARTES.items() if any(re.search(r"\b" + re.escape(p), texto) for p in palavras)}
 
 
 def _servico(fala: str) -> str:
-    return next((nome for nome, palavras in PALAVRAS_SERVICO if any(p in fala for p in palavras)), "")
+    servicos = list(agenda.servicos())
+    # 1) pelas partes: "cortar o cabelo e fazer a barba" -> o serviço cujo nome tem corte E barba
+    pedidas = _partes(fala)
+    if pedidas:
+        iguais = [n for n in servicos if _partes(n.lower()) == pedidas]
+        if iguais:
+            return iguais[0]
+    # 2) o nome exato (serve para qualquer serviço que o dono cadastrar, ex.: "Sobrancelha")
+    exato = [n for n in servicos if n.lower() in fala]
+    if exato:
+        return max(exato, key=len)
+    return ""
 
 
 def _dia(fala: str):
-    """Data pedida na fala: 'friday'/'sexta' -> próxima sexta; 'tomorrow'/'amanhã' -> próximo dia útil."""
-    amanha = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+    """Data pedida na fala: 'friday'/'sexta' -> próxima sexta; 'tomorrow'/'amanhã' -> próximo dia aberto."""
     if "tomorrow" in fala or "amanhã" in fala or "amanha" in fala:
-        return primeiro_dia_util(amanha)
+        return agenda.amanha()
     semana = next((i for i, d in enumerate(DIAS) if d in fala), None)
     if semana is None:
         semana = next((i for pt, i in DIAS_PT.items() if pt in fala), None)
     if semana is None:
         return None
-    return amanha + timedelta(days=(semana - amanha.weekday()) % 7)
+    base = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+    return base + timedelta(days=(semana - base.weekday()) % 7)
 
 
 def _hora(fala: str):
     """(hora, minuto) pedidos: '3pm', '3:30 pm', '15h', '15h30', '15:30'."""
-    fala = re.sub(r"·\s*\d+\s*(?:min|hr|h)\b", "", fala)  # "Corte + barba · 1h" é duração, não horário
+    fala = re.sub(r"·\s*\d+\s*(?:min|hr|h)\b", "", fala)  # "Corte e barba · 1h" é duração, não horário
     m = re.search(r"\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b", fala)
     if m:
         return int(m.group(1)) % 12 + (12 if m.group(3) == "pm" else 0), int(m.group(2) or 0)
@@ -162,14 +157,15 @@ def _ultimo(falas: list, achar):
 
 def _mais_proximos(alvo: datetime, livres: list, quantos: int = 3) -> list:
     """Horários livres mais perto do pedido: primeiro no mesmo dia, depois os seguintes."""
-    mesmo_dia = [s for s in livres if para_data(s).date() == alvo.date()]
+    mesmo_dia = [s for s in livres if agenda.para_data(s).date() == alvo.date()]
     if mesmo_dia:
-        perto = sorted(mesmo_dia, key=lambda s: abs(para_data(s) - alvo))[:quantos]
-        return sorted(perto, key=para_data)  # mostra em ordem de horário
-    return [s for s in livres if para_data(s) > alvo][:quantos]
+        perto = sorted(mesmo_dia, key=lambda s: abs(agenda.para_data(s) - alvo))[:quantos]
+        return sorted(perto, key=agenda.para_data)  # mostra em ordem de horário
+    return [s for s in livres if agenda.para_data(s) > alvo][:quantos]
 
 
 def _modo_demo(conversa: list, livres: dict) -> dict:
+    servicos = agenda.servicos()
     falas = [m["content"].lower() for m in conversa if m["role"] == "user"]
     texto = " ".join(falas)
 
@@ -184,13 +180,11 @@ def _modo_demo(conversa: list, livres: dict) -> dict:
     if not slot:
         dia, hora = _ultimo(falas, _dia), _ultimo(falas, _hora)
         if hora:
-            base = dia or primeiro_dia_util(datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1))
-            pedido = base.replace(hour=hora[0], minute=hora[1])
-            exato = pedido.strftime(FORMATO_SLOT)
-            if exato in livres_servico:
-                slot = exato
+            pedido = (dia or agenda.amanha()).replace(hour=hora[0], minute=hora[1])
+            if pedido.strftime(FORMATO_SLOT) in livres_servico:
+                slot = pedido.strftime(FORMATO_SLOT)
         elif dia:
-            pedido = dia.replace(hour=ABRE)
+            pedido = agenda.abre_fecha(dia)[0]
 
     nome_match = re.search(r"(?:my name is|i'm|i am|name:|meu nome é|me chamo|sou o|sou a)\s+([a-zà-ú]+)", texto)
     nome = nome_match.group(1).title() if nome_match else ""
@@ -200,41 +194,40 @@ def _modo_demo(conversa: list, livres: dict) -> dict:
 
     opcoes = []
     if not servico:
-        opcoes = [f"{tr.servico(n)} · {tr.duracao(s['minutos'])}" for n, s in SERVICOS.items()]
-        lista = ", ".join(f"{tr.servico(n)} ({tr.duracao(s['minutos'])}, {tr.moeda(tr.preco(n, s['preco']))})"
-                          for n, s in SERVICOS.items())
+        opcoes = [f"{n} · {tr.duracao(s['minutos'])}" for n, s in servicos.items()]
+        lista = ", ".join(f"{n} ({tr.duracao(s['minutos'])}, {tr.moeda(s['preco'])})" for n, s in servicos.items())
         reply = tr.t(f"Hey! 👋 Welcome to Black Crown. What would you like? {lista}.",
                      f"Oi! 👋 Bem-vindo à Black Crown. O que você quer fazer? {lista}.")
     elif not slot:
-        nome_servico = tr.servico(servico)
-        duracao = tr.duracao(SERVICOS[servico]["minutos"])
+        duracao = tr.duracao(servicos[servico]["minutos"])
         if pedido and _hora(texto):
             proximos = _mais_proximos(pedido, livres_servico)
             opcoes = [tr.slot(s) for s in proximos]
             # Mesmo dia: só a hora ("14:30"). Outro dia: dia e hora ("segunda, 30 de nov às 09:00")
-            horas = tr.lista([tr.hora(para_data(s)) if para_data(s).date() == pedido.date() else tr.slot(s)
+            horas = tr.lista([tr.hora(agenda.para_data(s)) if agenda.para_data(s).date() == pedido.date() else tr.slot(s)
                               for s in proximos])
-            fechado = not (ABRE <= pedido.hour < FECHA) or pedido.weekday() == 6
+            abre, fecha = agenda.abre_fecha(pedido)
+            fechado = not agenda.atende(pedido) or not (abre <= pedido < fecha)
             if fechado:
-                reply = tr.t(f"We're closed at that time. The closest open times for a {nome_servico} ({duracao}) are {horas}. Which one works?",
-                             f"Nesse horário a barbearia está fechada. Os horários livres mais próximos para {nome_servico.lower()} ({duracao}) são {horas}. Qual fica melhor?")
+                reply = tr.t(f"We're closed at that time. The closest open times for a {servico} ({duracao}) are {horas}. Which one works?",
+                             f"Nesse horário a barbearia está fechada. Os horários livres mais próximos para {servico.lower()} ({duracao}) são {horas}. Qual fica melhor?")
             else:
                 reply = tr.t(f"Sorry, {tr.slot(pedido.strftime(FORMATO_SLOT))} is already booked. "
-                             f"The closest open times for a {nome_servico} ({duracao}) are {horas}. Which one works?",
+                             f"The closest open times for a {servico} ({duracao}) are {horas}. Which one works?",
                              f"Poxa, {tr.slot(pedido.strftime(FORMATO_SLOT))} já está ocupado. "
-                             f"Os horários livres mais próximos para {nome_servico.lower()} ({duracao}) são {horas}. Qual fica melhor?")
+                             f"Os horários livres mais próximos para {servico.lower()} ({duracao}) são {horas}. Qual fica melhor?")
         else:
             proximos = _mais_proximos(pedido, livres_servico) if pedido else livres_servico[:3]
             opcoes = [tr.slot(s) for s in proximos]
-            reply = tr.t(f"Nice, a {nome_servico} ({duracao})! Here are the next open times. Which one works for you?",
-                         f"Boa, {nome_servico.lower()} ({duracao})! Esses são os próximos horários livres. Qual fica bom pra você?")
+            reply = tr.t(f"Nice, a {servico} ({duracao})! Here are the next open times. Which one works for you?",
+                         f"Boa, {servico.lower()} ({duracao})! Esses são os próximos horários livres. Qual fica bom pra você?")
     elif not nome or not telefone:
-        reply = tr.t(f"Got it: {tr.servico(servico)} on {tr.slot(slot)}. What's your name and phone number so I can lock it in?",
-                     f"Fechado: {tr.servico(servico).lower()} para {tr.slot(slot)}. Qual o seu nome e telefone pra eu confirmar?")
+        reply = tr.t(f"Got it: {servico} on {tr.slot(slot)}. What's your name and phone number so I can lock it in?",
+                     f"Fechado: {servico.lower()} para {tr.slot(slot)}. Qual o seu nome e telefone pra eu confirmar?")
     else:
-        reply = tr.t(f"You're all set, {nome}! ✅ {tr.servico(servico)} on {tr.slot(slot)}. "
+        reply = tr.t(f"You're all set, {nome}! ✅ {servico} on {tr.slot(slot)}. "
                      f"We'll text you a reminder at {telefone}. See you at 120 Ocean Dr!",
-                     f"Tudo certo, {nome}! ✅ {tr.servico(servico)} para {tr.slot(slot)}. "
+                     f"Tudo certo, {nome}! ✅ {servico} para {tr.slot(slot)}. "
                      f"Vamos mandar um lembrete para {telefone}. Te esperamos na 120 Ocean Dr!")
 
     return {"reply": reply, "options": opcoes, "ready_to_book": bool(servico and slot and nome and telefone),

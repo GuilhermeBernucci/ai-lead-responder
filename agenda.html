@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Black Crown · My schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Paleta Black Crown (igual ao site e ao painel) */
+  :root { --fundo: #010700; --cartao: #1D0601; --cartao-hover: #260802; --botao: #2F2F2F; --botao-hover: #3E3E3E;
+          --texto: #F8F9FA; --texto-2: #C4C9CE; --borda: #0D0E0F; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Work Sans", system-ui, sans-serif; color: var(--texto); background: var(--fundo); line-height: 1.5; }
+  :focus-visible { outline: 3px solid var(--texto-2); outline-offset: 2px; }
+  header { background: var(--fundo); color: var(--texto-2); padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--borda); }
+  header .logo { font-family: "Poiret One", sans-serif; font-size: 24px; color: var(--texto); }
+  header nav a { color: var(--texto-2); font-size: 14px; margin-left: 18px; }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-family: "Poiret One", sans-serif; font-weight: 400; font-size: 40px; margin: 0; }
+  .intro { color: var(--texto-2); margin: 6px 0 24px; max-width: 40em; }
+
+  .aviso { background: var(--botao); border: 1px solid var(--borda); border-radius: 10px; padding: 12px 16px; margin: 0 0 20px; }
+  .bloco { background: var(--cartao); border: 1px solid var(--borda); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; }
+  .bloco h2 { font-size: 18px; margin: 0 0 12px; }
+  .bloco h3 { font-size: 15px; margin: 18px 0 8px; }
+  .dica-campo { color: var(--texto-2); font-size: 14px; margin: 8px 0 0; }
+  .horas { display: flex; gap: 24px; flex-wrap: wrap; }
+  .horas label { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+  input { font: inherit; color: var(--texto); background: var(--fundo); border: 1px solid var(--botao); border-radius: 8px; padding: 8px 10px; }
+  input:focus { outline: 2px solid var(--texto-2); }
+  input[type="number"] { width: 100px; }
+  input[type="time"] { color-scheme: dark; }
+  .dias { display: flex; flex-wrap: wrap; gap: 8px; }
+  .dia-check { display: flex; align-items: center; gap: 6px; background: var(--botao); border-radius: 20px; padding: 6px 12px; cursor: pointer; }
+  .dia-check:hover { background: var(--botao-hover); }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 13px; color: var(--texto-2); font-weight: 500; padding: 4px 6px; }
+  td { padding: 6px; }
+  td input:not([type]) , td input[name^="nome"] { width: 100%; }
+  tr.novo td input { border-style: dashed; }
+  .remover { font-size: 13px; color: var(--texto-2); display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+  .config > button { font: inherit; font-weight: 600; background: var(--texto); color: var(--fundo); border: 0; border-radius: 10px; padding: 12px 22px; cursor: pointer; }
+  .config > button:hover { background: var(--texto-2); }
+
+  .previa { margin-top: 28px; }
+  .previa-servico { margin-top: 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip { font-size: 13px; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--borda); }
+  .chip.livre { background: var(--botao); color: var(--texto); }
+  .chip.ocupado { background: var(--fundo); color: #555a5f; text-decoration: line-through; }
+
+  @media (max-width: 640px) {
+    thead { display: none; }
+    tr { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; border-bottom: 1px solid var(--borda); padding: 8px 0; }
+    td:first-child { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+  <header><span class="logo">Black Crown</span><nav><a href="/painel">Your appointments</a><a href="/">Your website</a></nav></header>
+  <main>
+    <h1>My schedule</h1>
+    <p class="intro">Set your hours and what you offer. How long each service takes decides which times clients can book, both on your website and in the chat.</p>
+    {{CONTEUDO}}
+  </main>
+</body>
+</html>

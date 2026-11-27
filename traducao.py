@@ -116,6 +116,23 @@ FRASES = {
     "Shape, line-up and hot towel · 30 min": "Desenho, contorno e toalha quente · 30 min",
     "The full reset · 1 hr": "O pacote completo · 1h",
     "typing…": "digitando…",
+    "Walk-ins welcome when chairs are free": "Sem hora marcada quando tiver cadeira livre",
+    # agenda online no site
+    "Book online": "Agende online",
+    "Pick a service, a day and an open time. Then just send your name and phone in the chat.":
+        "Escolha o serviço, o dia e um horário livre. Depois é só mandar seu nome e telefone no chat.",
+    "Service": "Serviço",
+    "Day": "Dia",
+    "Time": "Horário",
+    "Open": "Livre",
+    "Booked": "Ocupado",
+    # agenda do dono
+    "Black Crown · My schedule": "Black Crown · Minha agenda",
+    "My schedule": "Minha agenda",
+    "Your appointments": "Seus horários",
+    "Your website": "Seu site",
+    "Set your hours and what you offer. How long each service takes decides which times clients can book, both on your website and in the chat.":
+        "Defina seu horário e o que você faz. O tempo de cada serviço decide quais horários o cliente pode marcar, no site e no chat.",
     "How much is a beard trim?": "Quanto custa a barba?",
     "Send": "Enviar",
     "Scissor or clipper, wash and style": "Tesoura ou máquina, lavagem e finalização",

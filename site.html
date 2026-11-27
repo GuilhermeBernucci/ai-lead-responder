@@ -87,6 +87,24 @@
   .rodape b { color: var(--texto); display: block; margin-bottom: 6px; }
   .demo-links { text-align: center; padding: 14px; font-size: 13px; background: var(--cartao); color: var(--texto-2); }
 
+  /* Agenda online */
+  .agendar { background: var(--cartao); border-top: 1px solid var(--borda); }
+  .sub-agendar { color: var(--texto-2); margin: -16px 0 24px; }
+  .passo-agendar { display: flex; align-items: center; gap: 10px; font-weight: 600; margin: 20px 0 10px; }
+  .passo-agendar span { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--botao); font-size: 13px; }
+  .opcoes-servico, .opcoes-dia { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opcoes-servico button, .opcoes-dia button { border: 1px solid var(--borda); background: var(--botao); color: var(--texto); border-radius: 22px; padding: 9px 16px; font: inherit; font-size: 14px; cursor: pointer; }
+  .opcoes-servico button:hover, .opcoes-dia button:hover { background: var(--botao-hover); }
+  .opcoes-servico button[aria-pressed="true"], .opcoes-dia button[aria-pressed="true"] { background: var(--texto); color: var(--fundo); }
+  .opcoes-servico small { color: inherit; opacity: .7; margin-left: 6px; }
+  .grade-horarios { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+  .grade-horarios button { border: 1px solid var(--borda); border-radius: 8px; padding: 10px 0; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; background: var(--botao); color: var(--texto); }
+  .grade-horarios button:hover { background: var(--botao-hover); }
+  .grade-horarios button:disabled { background: var(--fundo); color: #555a5f; cursor: not-allowed; text-decoration: line-through; }
+  .legenda-agendar { color: var(--texto-2); font-size: 13px; display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+  .amostra { width: 14px; height: 14px; border-radius: 4px; display: inline-block; border: 1px solid var(--borda); }
+  .amostra.livre { background: var(--botao); } .amostra.ocupado { background: var(--fundo); margin-left: 10px; }
+
   @media (max-width: 860px) {
     .hero-grade, .precos, .barbeiros, .avaliacoes, .rodape .miolo { grid-template-columns: 1fr; }
     .barra nav { display: none; }
@@ -98,7 +116,7 @@
 
   <header class="barra">
     <a class="logo" href="/">Black Crown</a>
-    <nav><a href="#servicos">Services</a><a href="#equipe">Barbers</a><a href="#visite">Visit</a></nav>
+    <nav><a href="#servicos">Services</a><a href="#agendar">Book online</a><a href="#equipe">Barbers</a><a href="#visite">Visit</a></nav>
   </header>
 
   <div class="hero">
@@ -106,7 +124,7 @@
       <div>
         <h1>Sharp cuts on Ocean Drive</h1>
         <p>Classic cuts, skin fades and hot-towel beard work since 2014. Tell our assistant what you want and when, and you're booked in seconds, even at 2am.</p>
-        <p class="horario">Mon–Sat, 9am–7pm · Walk-ins welcome when chairs are free</p>
+        <p class="horario">{{HORARIO}} · Walk-ins welcome when chairs are free</p>
       </div>
 
       <div class="chat" aria-label="Booking chat">
@@ -124,11 +142,23 @@
   <section id="servicos">
     <div class="miolo">
       <h2>Services</h2>
-      <div class="precos">
-        <div class="item"><div><span class="nome">Haircut</span><small>Scissor, clipper or fade, wash and style · 30 min</small></div><span class="pontos"></span><b>$35</b></div>
-        <div class="item"><div><span class="nome">Beard Trim</span><small>Shape, line-up and hot towel · 30 min</small></div><span class="pontos"></span><b>$20</b></div>
-        <div class="item"><div><span class="nome">Haircut + Beard</span><small>The full reset · 1 hr</small></div><span class="pontos"></span><b>$50</b></div>
-      </div>
+      <div class="precos">{{SERVICOS}}</div>
+    </div>
+  </section>
+
+  <!-- Agenda online: o cliente escolhe o serviço, o dia e um horário livre (de 30 em 30 min).
+       Os serviços, a duração e o horário de funcionamento vêm da agenda que o dono configura em /agenda. -->
+  <section class="agendar" id="agendar">
+    <div class="miolo">
+      <h2>Book online</h2>
+      <p class="sub-agendar">Pick a service, a day and an open time. Then just send your name and phone in the chat.</p>
+      <div class="passo-agendar"><span>1</span>Service</div>
+      <div class="opcoes-servico" id="opcoes-servico"></div>
+      <div class="passo-agendar"><span>2</span>Day</div>
+      <div class="opcoes-dia" id="opcoes-dia"></div>
+      <div class="passo-agendar"><span>3</span>Time</div>
+      <div class="grade-horarios" id="grade-horarios" aria-live="polite"></div>
+      <p class="legenda-agendar"><span class="amostra livre"></span>Open <span class="amostra ocupado"></span>Booked</p>
     </div>
   </section>
 
@@ -157,7 +187,7 @@
   <footer class="rodape" id="visite">
     <div class="miolo">
       <div><b>Visit</b>120 Ocean Dr, Miami Beach, FL</div>
-      <div><b>Hours</b>Mon–Sat 9am–7pm<br>Sunday closed</div>
+      <div><b>Hours</b>{{HORARIO_RODAPE}}</div>
       <div><b>Call</b>(305) 555-0123</div>
     </div>
   </footer>
@@ -214,6 +244,55 @@
   }
 
   document.querySelectorAll("#sugestoes button").forEach(b => b.addEventListener("click", () => enviar(b.textContent)));
+
+  // ---------- Agenda online ----------
+  // Os serviços vêm do cardápio (que o servidor monta a partir da agenda do dono)
+  let servicoEscolhido = null, diaEscolhido = 0, dias = [];
+
+  function botao(texto, aoClicar, extra) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = texto;
+    if (extra) { const s = document.createElement("small"); s.textContent = extra; b.appendChild(s); }
+    b.addEventListener("click", aoClicar);
+    return b;
+  }
+
+  function marcar(caixa, escolhido) {
+    caixa.querySelectorAll("button").forEach((b, i) => b.setAttribute("aria-pressed", String(i === escolhido)));
+  }
+
+  function mostrarHorarios() {
+    const grade = document.getElementById("grade-horarios");
+    const dia = dias[diaEscolhido];
+    grade.replaceChildren(...(dia ? dia.horarios : []).map((h) => {
+      const b = botao(h.rotulo, () => {
+        enviar(h.mensagem);
+        document.querySelector(".chat").scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      b.disabled = !h.livre;
+      return b;
+    }));
+  }
+
+  async function escolherServico(nome, indice) {
+    servicoEscolhido = nome;
+    marcar(document.getElementById("opcoes-servico"), indice);
+    const resp = await fetch("/horarios?servico=" + encodeURIComponent(nome));
+    dias = (await resp.json()).dias;
+    diaEscolhido = Math.min(diaEscolhido, Math.max(dias.length - 1, 0));
+    const caixaDias = document.getElementById("opcoes-dia");
+    caixaDias.replaceChildren(...dias.map((d, i) => botao(d.rotulo, () => { diaEscolhido = i; marcar(caixaDias, i); mostrarHorarios(); })));
+    marcar(caixaDias, diaEscolhido);
+    mostrarHorarios();
+  }
+
+  const servicos = [...document.querySelectorAll(".precos .item")].map((item) => ({
+    nome: item.querySelector(".nome").textContent, duracao: item.querySelector("small").textContent,
+  }));
+  document.getElementById("opcoes-servico").replaceChildren(
+    ...servicos.map((s, i) => botao(s.nome, () => escolherServico(s.nome, i), s.duracao)));
+  if (servicos.length) escolherServico(servicos[0].nome, 0);
 </script>
 </body>
 </html>

@@ -37,6 +37,10 @@
   .horario { display: grid; grid-template-columns: 84px 1fr; gap: 14px; background: var(--cartao); border-radius: 12px; padding: 14px 16px; border: 1px solid var(--borda); transition: background .2s; }
   .horario:hover { background: var(--cartao-hover); }
   .horario time { font-weight: 600; color: var(--texto); }
+  .horario time small { display: block; font-weight: 400; font-size: 12px; color: var(--texto-2); }
+  .editar { margin: 0 0 20px; }
+  .editar a { display: inline-block; background: var(--botao); color: var(--texto); text-decoration: none; border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px; }
+  .editar a:hover { background: var(--botao-hover); }
   .tel { display: block; color: var(--texto-2); font-size: 14px; }
   summary { cursor: pointer; color: var(--texto); font-size: 14px; margin-top: 6px; font-weight: 500; }
   details[open] summary { margin-bottom: 8px; }
