@@ -16,6 +16,8 @@ import json
 import os
 import re
 
+import traducao as tr
+
 SERVICOS = {
     "Haircut": {"preco": 35, "minutos": 30},
     "Skin Fade": {"preco": 40, "minutos": 45},
@@ -39,7 +41,7 @@ ESQUEMA = {
     "additionalProperties": False,
 }
 
-INSTRUCOES = """You are the friendly booking assistant of "Fresh Cuts Barbershop" in Miami, FL.
+INSTRUCOES = """You are the friendly booking assistant of "Black Crown Barbershop" in Miami, FL.
 Chat with the customer by text, in a short, casual, friendly tone (1-3 sentences).
 Your goal: book an appointment. You need 4 things: service, time slot, name and phone.
 
@@ -87,13 +89,15 @@ def _modo_real(conversa: list, horarios_livres: list) -> dict:
 # ---------------- MODO DEMO (regras simples) ----------------
 
 PALAVRAS_SERVICO = [  # a ordem importa: o mais específico primeiro
-    ("Haircut + Beard", ["cut and beard", "haircut and beard", "cut + beard", "both"]),
-    ("Skin Fade", ["fade"]),
-    ("Beard Trim", ["beard"]),
-    ("Kids Cut", ["kid", "son", "child"]),
-    ("Haircut", ["haircut", "cut", "trim"]),
+    ("Haircut + Beard", ["cut and beard", "haircut and beard", "cut + beard", "both", "corte e barba", "corte + barba"]),
+    ("Skin Fade", ["fade", "degradê", "degrade"]),
+    ("Beard Trim", ["beard", "barba"]),
+    ("Kids Cut", ["kid", "son", "child", "infantil", "filho", "criança"]),
+    ("Haircut", ["haircut", "cut", "trim", "corte", "cortar"]),
 ]
 DIAS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+DIAS_PT = {"segunda": "monday", "terça": "tuesday", "terca": "tuesday", "quarta": "wednesday", "quinta": "thursday",
+           "sexta": "friday", "sábado": "saturday", "sabado": "saturday", "domingo": "sunday"}
 
 
 def _modo_demo(conversa: list, horarios_livres: list) -> dict:
@@ -105,34 +109,44 @@ def _modo_demo(conversa: list, horarios_livres: list) -> dict:
                     if any(p in texto for p in palavras)), "")
 
     # Horário: procura dia da semana e hora (ex.: "friday 3pm")
-    dia = next((d for d in DIAS if d in texto), "")
-    if "tomorrow" in texto and horarios_livres:
+    dia = next((d for d in DIAS if d in texto), "") or next((en for pt, en in DIAS_PT.items() if pt in texto), "")
+    if ("tomorrow" in texto or "amanhã" in texto) and horarios_livres:
         dia = horarios_livres[0].split()[0].lower()  # simplificação para a demo
     hora = re.search(r"\b(\d{1,2})\s*(am|pm)\b", texto)
     slot = ""
     candidatos = [h for h in horarios_livres if not dia or h.lower().startswith(dia)]
-    if hora:
-        h = int(hora.group(1)) % 12 + (12 if hora.group(2) == "pm" else 0)
+    hora_24 = re.search(r"\b(\d{1,2})\s*h\b", texto)  # português: "15h"
+    if hora or hora_24:
+        h = int(hora.group(1)) % 12 + (12 if hora.group(2) == "pm" else 0) if hora else int(hora_24.group(1))
         alvo = f"{h:02d}:00"
         slot = next((c for c in candidatos if alvo in c), "")
 
-    nome_match = re.search(r"(?:my name is|i'm|i am|name:)\s+([a-z]+)", texto)
+    nome_match = re.search(r"(?:my name is|i'm|i am|name:|meu nome é|me chamo|sou o|sou a)\s+([a-zà-ú]+)", texto)
     nome = nome_match.group(1).title() if nome_match else ""
     tel_match = re.search(r"(\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})", texto)
     telefone = tel_match.group(1) if tel_match else ""
 
     if not servico:
-        lista = ", ".join(f"{n} (${s['preco']})" for n, s in SERVICOS.items())
-        reply = f"Hey! 👋 Welcome to Fresh Cuts. What can we do for you today? We offer: {lista}."
+        lista = ", ".join(f"{tr.servico(n)} (${s['preco']})" for n, s in SERVICOS.items())
+        reply = tr.t(f"Hey! 👋 Welcome to Black Crown. What can we do for you today? We offer: {lista}.",
+                     f"Oi! 👋 Bem-vindo à Black Crown. O que vamos fazer hoje? Temos: {lista}.")
     elif not slot:
-        sugestoes = ", ".join(candidatos[:3] or horarios_livres[:3])
-        reply = (f"Nice, a {servico}! That time isn't open, but I have: {sugestoes}. Which one works?"
-                 if hora else f"Nice, a {servico}! I have: {sugestoes}. Which one works for you?")
+        sugestoes = ", ".join(tr.slot(s) for s in (candidatos[:3] or horarios_livres[:3]))
+        nome_servico = tr.servico(servico)
+        if hora or hora_24:
+            reply = tr.t(f"Nice, a {nome_servico}! That time isn't open, but I have: {sugestoes}. Which one works?",
+                         f"Boa, {nome_servico.lower()}! Esse horário não está livre, mas tenho: {sugestoes}. Qual fica bom?")
+        else:
+            reply = tr.t(f"Nice, a {nome_servico}! I have: {sugestoes}. Which one works for you?",
+                         f"Boa, {nome_servico.lower()}! Tenho: {sugestoes}. Qual fica bom pra você?")
     elif not nome or not telefone:
-        reply = f"Got it: {servico} on {slot}. What's your name and phone number so I can lock it in?"
+        reply = tr.t(f"Got it: {servico} on {slot}. What's your name and phone number so I can lock it in?",
+                     f"Fechado: {tr.servico(servico).lower()} para {tr.slot(slot)}. Qual o seu nome e telefone pra eu confirmar?")
     else:
-        reply = (f"You're all set, {nome}! ✅ {servico} on {slot}. "
-                 f"We'll text you a reminder at {telefone}. See you at 120 Ocean Dr!")
+        reply = tr.t(f"You're all set, {nome}! ✅ {servico} on {slot}. "
+                     f"We'll text you a reminder at {telefone}. See you at 120 Ocean Dr!",
+                     f"Tudo certo, {nome}! ✅ {tr.servico(servico)} para {tr.slot(slot)}. "
+                     f"Vamos mandar um lembrete para {telefone}. Te esperamos na 120 Ocean Dr!")
 
     return {"reply": reply, "ready_to_book": bool(servico and slot and nome and telefone),
             "service": servico, "slot": slot, "customer_name": nome, "phone": telefone}

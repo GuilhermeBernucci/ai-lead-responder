@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
+import traducao as tr
 from ia import SERVICOS, responder
 
 PASTA = Path(__file__).parent
@@ -77,15 +78,18 @@ def horarios_livres() -> list:
 def lembretes(agendamento: dict) -> list:
     """Os SMS que o sistema manda para este cliente: (quando, para quê, texto)."""
     nome = agendamento["customer_name"].split()[0]
-    servico = agendamento["service"]
+    servico = tr.servico(agendamento["service"])
     inicio = slot_para_data(agendamento["slot"])
     return [
-        (inicio - timedelta(hours=24), "Reminder", "cuts no-shows",
-         f"Hi {nome}! Reminder: your {servico} at Fresh Cuts is tomorrow at {hora(inicio)}. Reply C to cancel."),
-        (inicio - timedelta(hours=2), "Heads-up", "keeps you on time",
-         f"See you soon, {nome}! Your {servico} is in 2 hours. 120 Ocean Dr."),
-        (inicio + timedelta(weeks=4), "Rebooking", "brings them back",
-         f"Hey {nome}, it's been 4 weeks since your last {servico}. Want me to book your next one?"),
+        (inicio - timedelta(hours=24), tr.t("Reminder", "Lembrete"), tr.t("cuts no-shows", "evita faltas"),
+         tr.t(f"Hi {nome}! Reminder: your {servico} at Black Crown is tomorrow at {tr.hora(inicio)}. Reply C to cancel.",
+              f"Oi, {nome}! Lembrete: seu {servico.lower()} na Black Crown é amanhã às {tr.hora(inicio)}. Responda C para cancelar.")),
+        (inicio - timedelta(hours=2), tr.t("Heads-up", "Aviso"), tr.t("keeps you on time", "garante a pontualidade"),
+         tr.t(f"See you soon, {nome}! Your {servico} is in 2 hours. 120 Ocean Dr.",
+              f"Até já, {nome}! Seu {servico.lower()} é daqui a 2 horas. 120 Ocean Dr.")),
+        (inicio + timedelta(weeks=4), tr.t("Rebooking", "Retorno"), tr.t("brings them back", "traz o cliente de volta"),
+         tr.t(f"Hey {nome}, it's been 4 weeks since your last {servico}. Want me to book your next one?",
+              f"E aí, {nome}? Já faz 4 semanas do seu último {servico.lower()}. Quer que eu marque o próximo?")),
     ]
 
 
@@ -101,7 +105,7 @@ def loja_fechada(horario: str) -> bool:
 # ---------------- Páginas ----------------
 
 def pagina(nome_arquivo: str, conteudo: str = "") -> str:
-    return (PASTA / nome_arquivo).read_text(encoding="utf-8").replace("{{CONTEUDO}}", conteudo)
+    return tr.pagina((PASTA / nome_arquivo).read_text(encoding="utf-8")).replace("{{CONTEUDO}}", conteudo)
 
 
 def montar_painel() -> str:
@@ -110,15 +114,15 @@ def montar_painel() -> str:
     fora_do_horario = sum(1 for a in agenda if loja_fechada(a.get("booked_at", "")))
 
     partes = [f"""
-    <section class="numeros" aria-label="This week at a glance">
-      <div><strong>{len(agenda)}</strong><span>appointments booked by your assistant</span></div>
-      <div><strong>${total}</strong><span>in services on the calendar</span></div>
-      <div><strong>{len(agenda) * 3}</strong><span>text messages scheduled, so you don't have to send them</span></div>
-      <div><strong>{fora_do_horario}</strong><span>booked while the shop was closed</span></div>
+    <section class="numeros" aria-label="{tr.t('This week at a glance', 'Resumo da semana')}">
+      <div><strong>{len(agenda)}</strong><span>{tr.t('appointments booked by your assistant', 'horários marcados pelo seu assistente')}</span></div>
+      <div><strong>${total}</strong><span>{tr.t('in services on the calendar', 'em serviços na agenda')}</span></div>
+      <div><strong>{len(agenda) * 3}</strong><span>{tr.t("text messages scheduled, so you don't have to send them", 'mensagens programadas, que você não precisa mandar')}</span></div>
+      <div><strong>{fora_do_horario}</strong><span>{tr.t('booked while the shop was closed', 'marcados com a barbearia fechada')}</span></div>
     </section>"""]
 
     if not agenda:
-        partes.append("<p class='vazio'>No appointments yet. Open your website and book a test appointment in the chat to see it appear here.</p>")
+        partes.append("<p class='vazio'>" + tr.t("No appointments yet. Open your website and book a test appointment in the chat to see it appear here.", "Nenhum horário ainda. Abra o seu site e marque um horário de teste no chat para ver ele aparecer aqui.") + "</p>")
 
     dia_atual = None
     for a in agenda:
@@ -127,22 +131,22 @@ def montar_painel() -> str:
             if dia_atual is not None:
                 partes.append("</div>")
             dia_atual = inicio.date()
-            partes.append(f"<h3 class='dia'>{inicio:%A, %B} {inicio.day}</h3><div class='lista'>")
+            partes.append(f"<h3 class='dia'>{tr.dia(inicio)}</h3><div class='lista'>")
 
         passos = []
         for quando, nome, motivo, texto in lembretes(a):
             estado = "sent" if quando < datetime.now() else "scheduled"
-            passos.append(f"""<li class="{estado}"><b>{nome}</b> · {quando:%a %b} {quando.day}, {hora(quando)}
+            passos.append(f"""<li class="{estado}"><b>{nome}</b> · {tr.dia(quando, curto=True)}, {tr.hora(quando)}
               <span class="motivo">{motivo}</span><q>{html.escape(texto)}</q></li>""")
 
         preco = SERVICOS.get(a["service"], {}).get("preco", "?")
         partes.append(f"""
         <article class="horario">
-          <time>{hora(inicio)}</time>
+          <time>{tr.hora(inicio)}</time>
           <div class="info">
-            <b>{html.escape(a['customer_name'])}</b> · {html.escape(a['service'])} · ${preco}
+            <b>{html.escape(a['customer_name'])}</b> · {html.escape(tr.servico(a['service']))} · ${preco}
             <span class="tel">{html.escape(a['phone'])}</span>
-            <details><summary>What happens next with this client</summary><ol class="linha">{''.join(passos)}</ol></details>
+            <details><summary>{tr.t('What happens next with this client', 'O que acontece agora com este cliente')}</summary><ol class="linha">{''.join(passos)}</ol></details>
           </div>
         </article>""")
     if dia_atual is not None:
@@ -173,7 +177,8 @@ class Servidor(BaseHTTPRequestHandler):
             salvar_agenda(agenda)
             # Num produto real: aqui programaríamos os SMS de verdade (ex.: Twilio)
         elif resultado["ready_to_book"]:
-            resultado["reply"] = "That slot was just taken. Pick another time and I'll book it."
+            resultado["reply"] = tr.t("That slot was just taken. Pick another time and I'll book it.",
+                                      "Esse horário acabou de ser ocupado. Escolha outro que eu marco pra você.")
             resultado["ready_to_book"] = False
 
         self._enviar(json.dumps(resultado), "application/json")
