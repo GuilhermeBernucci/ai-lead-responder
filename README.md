@@ -22,7 +22,7 @@ Pages: `/` website with booking chat · `/painel` owner dashboard · `/planos` p
 
 ## Video walkthroughs
 
-- 🇺🇸 English: [videos/barbearia-en.mp4](videos/barbearia-en.mp4) (58s)
+- 🇺🇸 English: [videos/barbearia-en.mp4](videos/barbearia-en.mp4) (77s)
 - 🇧🇷 Português: [videos/barbearia-pt.mp4](videos/barbearia-pt.mp4) (56s)
 
 Recorded automatically with `videos/gravar.js` (Playwright + narration). To re-record after changing the site:
